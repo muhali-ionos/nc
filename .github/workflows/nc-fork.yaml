@@ -21,14 +21,21 @@ jobs:
       - name: Increase Git Buffer Size
         run: |
           git config --global http.postBuffer 524288000
+          git config --global http.maxRequestBuffer 1048576000
           
       - name: Fork NextCloud Repository Master Branch Only
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          for i in {1..5}; do
-            git clone --single-branch --branch master https://github.com/nextcloud/server.git && break || sleep 15;
+          retries=0
+          while [ $retries -lt 5 ]; do
+            git clone --single-branch --branch master https://github.com/nextcloud/server.git && break || sleep 15
+            retries=$((retries + 1))
           done
+          if [ $retries -eq 5 ]; then
+            echo "Failed to clone the repository after 5 attempts"
+            exit 1
+          fi
           cd server
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/muhali-ionos/nc.git
           git push --set-upstream origin master  
