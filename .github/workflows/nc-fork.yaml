@@ -1,0 +1,33 @@
+name: Fork NextCloud and Build Docker Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fork-and-build:
+    runs-on: arc-runner-nc-fork
+
+    steps:
+      - name: Install Git
+        run: |
+          if ! command -v git &> /dev/null
+          then
+            echo "Git not found, installing..."
+            sudo apt-get update
+            sudo apt-get install -y git
+          else
+            echo "Git is already installed"
+          fi
+
+      - name: Checkout Private Repository
+        uses: actions/checkout@v4
+        with:
+          repository: muhali-ionos/nc.git
+          token: ${{ secrets.GH_PAT }}
+          
+      - name: Fork NextCloud Repository
+        run: |
+          git clone --single-branch --branch master https://github.com/nextcloud/server.git
+          cd server
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/muhali-ionos/nc.git
+          git push --set-upstream origin master  
