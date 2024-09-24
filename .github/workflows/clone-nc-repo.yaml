@@ -1,0 +1,42 @@
+name: Fork NextCloud Repo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fork-and-build:
+    runs-on: arc-runner-nc-fork
+
+    steps:    
+      - name: Install Git
+        run: |
+          if ! command -v git &> /dev/null
+          then
+            echo "Git not found, installing..."
+            sudo apt-get update
+            sudo apt-get install -y git
+          else
+            echo "Git is already installed"
+          fi
+      - name: Increase Git Buffer Size
+        run: |
+          git config --global http.postBuffer 524288000
+          git config --global http.maxRequestBuffer 1048576000
+          git config --global core.compression 0 # Disables compression
+          
+      - name: Fork NextCloud Repository Master Branch Only
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+
+      - name: Clone GuillaumeFalourd/poc-github-actions PUBLIC repository
+        uses: GuillaumeFalourd/clone-github-repo-action@v2.1
+        with:
+          depth: 1
+          branch: 'master'
+          repository: 'nextcloud/server'
+
+      - name: Access cloned repository content
+        run: |
+          cd server
+          ls -la
+          
