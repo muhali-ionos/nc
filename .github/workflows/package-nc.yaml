@@ -30,10 +30,13 @@ jobs:
 
       - name: Package Code
         run: |
-          tar -czvf nc-server.tar.gz .
-
+          mkdir -p /tmp/nc-server
+          cp -r . /tmp/nc-server
+          cd /tmp/nc-server
+          tar -czvf /tmp/nc-server.tar.gz .
+          
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: nc-server-package
-          path: nc-server.tar.gz
+          path: /tmp/nc-server.tar.gz
