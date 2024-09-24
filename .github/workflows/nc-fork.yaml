@@ -32,7 +32,7 @@ jobs:
           retries=0
           while [ $retries -lt 5 ]; do
             # Use shallow clone to reduce data transfer and continue on errors, logging outputs
-            git clone --branch "master" --depth="1" https://github.com/nextcloud/server.git && break || {
+            git clone --single-branch --branch "master" --depth="1" https://github.com/nextcloud/server.git && break || {
               echo "Failed to clone, retrying..."
               sleep 15
             }
@@ -49,8 +49,8 @@ jobs:
         run: |
           cd server
           ls -la
-          #git remote set-url origin https://x-access-token:${GH_PAT}@github.com/muhali-ionos/nc.git
-          #git push --force --set-upstream origin main
+          git remote add private https://x-access-token:${GH_PAT}@github.com/muhali-ionos/nc.git
+          git push private master:main -f
           
       - name: Checkout Private Repository
         uses: actions/checkout@v4
