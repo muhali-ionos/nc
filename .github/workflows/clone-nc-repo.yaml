@@ -33,8 +33,8 @@ jobs:
         with:
           depth: 1
           branch: 'main'
-          owner: 'GuillaumeFalourd'
-          repository: 'nextcloud/server'
+          owner: 'nextcloud'
+          repository: 'server'
 
       - name: Access cloned repository content
         run: |
