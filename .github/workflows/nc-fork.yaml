@@ -29,28 +29,16 @@ jobs:
           
       - name: Fork NextCloud Repository Master Branch Only
         run: |
-          retries=0
-          while [ $retries -lt 5 ]; do
-            # Use shallow clone to reduce data transfer and continue on errors, logging outputs
-            git clone --single-branch --branch "master" --depth="1" https://github.com/nextcloud/server.git && break || {
-              echo "Failed to clone, retrying..."
-              sleep 15
-            }
-            retries=$((retries + 1))
-          done
-          if [ $retries -eq 5 ]; then
-            echo "Failed to clone the repository after 5 attempts"
-            exit 1
-          fi
+         git clone --single-branch --branch "master" --depth=1 https://github.com/nextcloud/server.git nextcloud-server
 
       - name: Change Remote and Push
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          cd server
+          cd nextcloud-server
           ls -la
           git remote add private https://x-access-token:${GH_PAT}@github.com/muhali-ionos/nc.git
-          git push private master:main -f
+          git push -v private master:main -f
           
       - name: Checkout Private Repository
         uses: actions/checkout@v4
