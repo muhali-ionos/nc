@@ -1,0 +1,39 @@
+name: Package NextCloud Server
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  package-code:
+    runs-on: arc-runner-nc-fork
+
+    steps:
+      - name: Install Git
+        run: |
+          if ! command -v git &> /dev/null
+          then
+            echo "Git not found, installing..."
+            sudo apt-get update
+            sudo apt-get install -y git
+          else
+            echo "Git is already installed"
+          fi
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          repository: IONOS-Productivity/nc-server
+          ref: master
+
+      - name: Package Code
+        run: |
+          tar -czvf nc-server.tar.gz .
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: nc-server-package
+          path: nc-server.tar.gz
