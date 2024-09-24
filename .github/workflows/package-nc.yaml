@@ -33,7 +33,7 @@ jobs:
           tar -czvf nc-server.tar.gz .
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@4
         with:
           name: nc-server-package
           path: nc-server.tar.gz
