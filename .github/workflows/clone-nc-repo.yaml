@@ -28,11 +28,12 @@ jobs:
       #  env:
       #    GH_PAT: ${{ secrets.GH_PAT }}
 
-      - name: Clone GuillaumeFalourd/poc-github-actions PUBLIC repository
+      - name: Clone NextCloud/Server Public Repo
         uses: GuillaumeFalourd/clone-github-repo-action@v2.1
         with:
           depth: 1
-          branch: 'master'
+          branch: 'main'
+          owner: 'GuillaumeFalourd'
           repository: 'nextcloud/server'
 
       - name: Access cloned repository content
