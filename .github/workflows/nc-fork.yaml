@@ -31,7 +31,7 @@ jobs:
           retries=0
           while [ $retries -lt 5 ]; do
             # Use shallow clone to reduce data transfer and continue on errors, logging outputs
-            git clone --depth=1 --no-single-branch --branch master https://github.com/nextcloud/server.git && break || {
+            git clone --branch "master" --depth="1" https://github.com/nextcloud/server.git && break || {
               echo "Failed to clone, retrying..."
               sleep 15
             }
