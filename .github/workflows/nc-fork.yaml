@@ -38,10 +38,10 @@ jobs:
           pwd
           cd nextcloud-server
           ls -la
-          #git remote add private https://x-access-token:${GH_PAT}@github.com/muhali-ionos/nc.git
-          #git push -v private master:main -f
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/muhali-ionos/nc.git
-          git push -v --force origin master:main
+          for i in {1..5}; do
+            git push -v --force origin master:main && break || sleep 15;
+          done
           
       - name: Checkout Private Repository
         uses: actions/checkout@v4
