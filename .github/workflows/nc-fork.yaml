@@ -28,8 +28,6 @@ jobs:
           git config --global core.compression 0 # Disables compression
           
       - name: Fork NextCloud Repository Master Branch Only
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           retries=0
           while [ $retries -lt 5 ]; do
@@ -44,9 +42,15 @@ jobs:
             echo "Failed to clone the repository after 5 attempts"
             exit 1
           fi
+
+      - name: Change Remote and Push
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
           cd server
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/muhali-ionos/nc.git
-          git push --set-upstream origin master  
+          ls -la
+          #git remote set-url origin https://x-access-token:${GH_PAT}@github.com/muhali-ionos/nc.git
+          #git push --force --set-upstream origin main
           
       - name: Checkout Private Repository
         uses: actions/checkout@v4
