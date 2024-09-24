@@ -35,12 +35,13 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
+          pwd
           cd nextcloud-server
           ls -la
           #git remote add private https://x-access-token:${GH_PAT}@github.com/muhali-ionos/nc.git
           #git push -v private master:main -f
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/muhali-ionos/nc.git
-          git push -v --force --set-upstream origin master
+          git push -v --force --set-upstream origin main
           
       - name: Checkout Private Repository
         uses: actions/checkout@v4
