@@ -21,8 +21,6 @@ jobs:
           else
             echo "Git is already installed"
           fi
-
-      
       
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -30,22 +28,30 @@ jobs:
           repository: IONOS-Productivity/nc-server
           ref: master
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Package Code
         run: |
           mkdir -p /tmp/nc-server
           cp -r . /tmp/nc-server
           cd /tmp/nc-server
           tar -czvf /tmp/nc-server.tar.gz .
-          
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: nc-server-package
           path: /tmp/nc-server.tar.gz
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3 
+        with: 
+           buildkitd-flags: --debug
+
+      - name: Set up containerd
+        uses: crazy-max/ghaction-setup-containerd@v2
+        
       #- name: Build Docker Image
       #  run: |
       #    cd /tmp/nc-server/.devcontainer
@@ -59,14 +65,10 @@ jobs:
       #  run: |
       #    docker tag muhali/nextcloud:latest reg.1u1.it/nc/nextcloud:latest
       #    docker push reg.1u1.it/nc/nextcloud:latest
-
-      - name: Change Directory
-        run: |
-          cd /tmp/nc-server/.devcontainer
           
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./tmp/nc-server/.devcontainer
           push: true
           tags: reg.1u1.it/nc-image-test:latest
