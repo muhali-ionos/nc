@@ -68,4 +68,4 @@ jobs:
         with:
           context: ./.devcontainer
           push: true
-          tags: reg.1u1.it/itoah/nc-image-test:latest
+          tags: reg.1u1.it:443/itoah/nc-image-test:latest
