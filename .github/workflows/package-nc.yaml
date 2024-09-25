@@ -8,7 +8,7 @@ on:
 
 jobs:
   package-code:
-    runs-on: nc-runner
+    runs-on: self-hosted
 
     steps:
       - name: Install Git
