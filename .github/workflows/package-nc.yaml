@@ -66,6 +66,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          #context: .
+          context: ./.devcontainer
           push: true
           tags: reg.1u1.it/nc-image-test:latest
