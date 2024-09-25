@@ -35,20 +35,6 @@ jobs:
 
       #- name: Set up containerd
       #  uses: crazy-max/ghaction-setup-containerd@v2
-        
-      #- name: Build Docker Image
-      #  run: |
-      #    cd /tmp/nc-server/.devcontainer
-      #    docker build --network host -t muhali/nextcloud:latest .
-
-      - name: Login to Harbor
-        run: |
-          echo ${{ secrets.HARBOR_PASSWORD }} | docker login reg.1u1.it -u ${{ secrets.HARBOR_USERNAME }} --password-stdin
-
-      #- name: Push Docker Image to Harbor
-      #  run: |
-      #    docker tag muhali/nextcloud:latest reg.1u1.it/nc/nextcloud:latest
-      #    docker push reg.1u1.it/nc/nextcloud:latest
 
       - name: Package Code
         run: |
@@ -61,23 +47,28 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nc-server-package
-          path: /tmp/nc-server.tar.gz    
+          path: /tmp/nc-server.tar.gz   
+        
+      - name: Build Docker Image
+        run: |
+          cd .devcontainer
+          docker build --network host -t muhali/nextcloud:latest .
+
+      - name: Login to Harbor
+        run: |
+          echo ${{ secrets.HARBOR_PASSWORD }} | docker login reg.1u1.it -u ${{ secrets.HARBOR_USERNAME }} --password-stdin
+
+      - name: Push Docker Image to Harbor
+        run: |
+          docker tag muhali/nextcloud:latest reg.1u1.it:443/itoah/nextcloud:latest
+          docker push reg.1u1.it:443/itoah/nextcloud:latest
+
+ 
       
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: ./.devcontainer
-          push: true
-          tags: reg.1u1.it:443/itoah/nc-image-test:latest
-          build-args: |
-            DOCKER_BUILDKIT=1
-            COMPOSE_DOCKER_CLI_BUILD=1
-          outputs: type=image,push=true
-          secrets: |
-            HARBOR_USERNAME=${{ secrets.HARBOR_USERNAME }}
-            HARBOR_PASSWORD=${{ secrets.HARBOR_PASSWORD }}
-          extra-args: |
-            --network host
-            --build-arg BUILDKIT_INLINE_CACHE=1
-            --build-arg BUILDKIT_PROGRESS=plain
-            --build-arg BUILDKIT_TIMEOUT=600
+      #- name: Build and push
+      #  uses: docker/build-push-action@v6
+      #  with:
+      #    context: ./.devcontainer
+      #    push: true
+      #    tags: reg.1u1.it:443/itoah/nc-image-test:latest
+    
