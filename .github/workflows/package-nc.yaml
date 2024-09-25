@@ -30,8 +30,8 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3 
-        with: 
-           buildkitd-flags: --debug
+        #with: 
+        #   buildkitd-flags: --debug
 
       #- name: Set up containerd
       #  uses: crazy-max/ghaction-setup-containerd@v2
@@ -68,4 +68,4 @@ jobs:
         with:
           context: ./.devcontainer
           push: true
-          tags: reg.1u1.it/nc-image-test:latest
+          tags: reg.1u1.it/itoah/nc-image-test:latest
