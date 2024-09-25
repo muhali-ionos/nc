@@ -69,3 +69,15 @@ jobs:
           context: ./.devcontainer
           push: true
           tags: reg.1u1.it:443/itoah/nc-image-test:latest
+          build-args: |
+            DOCKER_BUILDKIT=1
+            COMPOSE_DOCKER_CLI_BUILD=1
+          outputs: type=image,push=true
+          secrets: |
+            HARBOR_USERNAME=${{ secrets.HARBOR_USERNAME }}
+            HARBOR_PASSWORD=${{ secrets.HARBOR_PASSWORD }}
+          extra-args: |
+            --network host
+            --build-arg BUILDKIT_INLINE_CACHE=1
+            --build-arg BUILDKIT_PROGRESS=plain
+            --build-arg BUILDKIT_TIMEOUT=600
