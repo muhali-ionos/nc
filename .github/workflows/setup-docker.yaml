@@ -7,7 +7,7 @@ jobs:
     runs-on: arc-runner-nc-fork
     steps:
     - name: Setup curl
-      uses: kordlib/setup-curl@v1.0.0
+      uses: wei/curl@v1
 
     - name: Setup Docker
       uses: docker-practice/actions-setup-docker@master
