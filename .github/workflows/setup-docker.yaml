@@ -16,7 +16,6 @@ jobs:
       
       - name: Build
         run: |
-          buildx build .   
           systemctl status docker
           docker version
           
