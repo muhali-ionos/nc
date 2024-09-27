@@ -3,11 +3,16 @@ on:
 
 name: docker-installation
 jobs:
-  ci:
+  docker:
     runs-on: arc-runner-nc-fork
     steps:
-    - uses: docker-practice/actions-setup-docker@master
+    - name: Setup curl
+      uses: kordlib/setup-curl@v1.0.0
+
+    - name: Setup Docker
+      uses: docker-practice/actions-setup-docker@master
       timeout-minutes: 12
+    
     - run: |
         set -x
 
