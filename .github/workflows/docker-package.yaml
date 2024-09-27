@@ -21,31 +21,23 @@ jobs:
           else
             echo "Git is already installed"
           fi
-          uname -a
-          which systemctl
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          buildkitd-flags: --debug
+      
+      - name: Build
+        run: |
+          systemctl status docker
+          docker version
       
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           repository: IONOS-Productivity/nc-server
           ref: master
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3 
-        #with: 
-        #   buildkitd-flags: --debug
-
-      - name: Set up Docker daemon
-        if: inputs.type == 'local'
-        run: |
-          if [ ! -e /etc/docker/daemon.json ]; then
-            echo '{}' | tee /etc/docker/daemon.json >/dev/null
-          fi
-          DOCKERD_CONFIG=$(jq '.+{"insecure-registries":["http://${{ env.REGISTRY_FQDN }}"]}' /etc/docker/daemon.json)
-          sudo tee /etc/docker/daemon.json <<<"$DOCKERD_CONFIG" >/dev/null
-          sudo service docker restart
-          sudo systemctl restart
-
+          
       - name: Package Code
         run: |
           mkdir -p /tmp/nc-server
