@@ -1,4 +1,4 @@
-name: Package NextCloud Server
+name: Package and Dockerize NextCloud Server
 
 on:
   workflow_dispatch:
