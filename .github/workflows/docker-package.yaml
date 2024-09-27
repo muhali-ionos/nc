@@ -21,6 +21,7 @@ jobs:
           else
             echo "Git is already installed"
           fi
+          uname -a
       
       - name: Checkout Repository
         uses: actions/checkout@v4
