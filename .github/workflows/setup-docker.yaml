@@ -11,6 +11,7 @@ jobs:
 
       - name: Install Docker
         run: | 
+          sudo apt install -y apt-utils
           sudo apt update
           sudo apt install -y curl gnupg
           sudo install -m 0755 -d /etc/apt/keyrings
