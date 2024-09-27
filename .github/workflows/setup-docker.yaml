@@ -4,7 +4,7 @@ on:
 name: docker-installation
 jobs:
   buildx:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-nc-fork
     steps:
       - name: Checkout
         uses: actions/checkout@v4
