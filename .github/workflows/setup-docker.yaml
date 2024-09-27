@@ -3,9 +3,20 @@ on:
 
 name: docker-installation
 jobs:
-  test-image:
-    runs-on: arc-runner-nc-fork
+  buildx:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Check that the image builds
-        run: docker build . --file Dockerfile
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: kubernetes
+      
+      - name: Build
+        run: |
+          buildx build .   
+          systemctl status docker
+          docker version
+          
