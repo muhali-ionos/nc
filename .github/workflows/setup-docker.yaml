@@ -3,19 +3,9 @@ on:
 
 name: docker-installation
 jobs:
-  docker:
-    runs-on: arc-runner-nc-fork
+  test-image:
+    runs-on: arc-runner-nc
     steps:
-    - name: Setup curl
-      uses: wei/curl@v1
-
-    - name: Setup Docker
-      uses: docker-practice/actions-setup-docker@master
-      timeout-minutes: 12
-    
-    - run: |
-        set -x
-
-        docker version
-
-        docker run --rm hello-world
+      - uses: actions/checkout@v4
+      - name: Check that the image builds
+        run: docker build . --file Dockerfile
