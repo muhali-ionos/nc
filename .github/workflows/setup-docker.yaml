@@ -4,7 +4,7 @@ on:
 name: docker-installation
 jobs:
   test-image:
-    runs-on: arc-runner-nc
+    runs-on: arc-runner-nc-fork
     steps:
       - uses: actions/checkout@v4
       - name: Check that the image builds
