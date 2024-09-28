@@ -4,7 +4,7 @@ on:
 name: docker-installation
 jobs:
   buildx:
-    runs-on: arc-runner-nc-fork
+    runs-on: arc-runners-nextcloud
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -12,7 +12,6 @@ jobs:
       - name: Install Docker
         run: |       
           sudo apt update --fix-missing
-          sudo apt update
           sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
           systemctl status docker
           docker version
