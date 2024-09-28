@@ -1,0 +1,13 @@
+on:
+  workflow_dispatch:
+
+name: docker-installation
+jobs:
+  Curl:
+    runs-on: arc-runner-nextcloud
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup curl
+        uses: kordlib/setup-curl@v1.0.0
