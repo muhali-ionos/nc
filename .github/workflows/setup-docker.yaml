@@ -1,13 +1,35 @@
+name: Setup and Verify Docker Installation
+
 on:
   workflow_dispatch:
 
-name: docker-installation
 jobs:
-  buildx:
+  verify-docker:
     runs-on: arc-runners-nextcloud
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Verify Docker Installation
+        run: |
+          if ! command -v docker &> /dev/null
+          then
+            echo "Docker is not installed. Installing Docker..."
+            sudo apt-get update
+            sudo apt-get install -y docker.io
+          else
+            echo "Docker is already installed."
+          fi
+
+      - name: Start Docker Daemon
+        run: |
+          sudo systemctl start docker
+          sudo systemctl enable docker
+
+      - name: Verify Docker Daemon Status
+        run: |
+          sudo systemctl status docker
+          docker version
           
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
