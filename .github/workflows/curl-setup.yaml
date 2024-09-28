@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
 
-name: docker-installation
+name: Curl Installation
 jobs:
   Curl:
     runs-on: arc-runner-nextcloud
