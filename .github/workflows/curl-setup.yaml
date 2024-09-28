@@ -4,7 +4,7 @@ on:
 name: Curl-Installation
 jobs:
   curl:
-    runs-on: arc-runner-nextcloud
+    runs-on: arc-runners-nextcloud
     steps:
       - name: Checkout
         uses: actions/checkout@v4
