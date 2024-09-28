@@ -1,9 +1,9 @@
 on:
   workflow_dispatch:
 
-name: Curl Installation
+name: Curl-Installation
 jobs:
-  Curl:
+  curl:
     runs-on: arc-runner-nextcloud
     steps:
       - name: Checkout
