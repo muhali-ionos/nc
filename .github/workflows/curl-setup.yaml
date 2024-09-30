@@ -11,6 +11,10 @@ jobs:
         
       - name: Install Curl
         run: |
+          current_user=$(echo $USER)
+          current_home=$(echo $HOME)
+          echo "The current user is: $current_user"
+          echo "The current home is: $current_home"
           sudo apt-get update
           sudo apt-get install -y curl ca-certificates
           curl --version
@@ -24,10 +28,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
           #sudo groupadd docker
-          sudo usermod -aG docker $USER
+          sudo usermod -aG docker $current_user
           newgrp docker
-          sudo chown "$USER":"$USER" /home/"$USER"/.docker -R
-          sudo chmod g+rwx "$HOME/.docker" -R
+          sudo chown "$current_user":"$current_user" /home/"$current_user"/.docker -R
+          sudo chmod g+rwx "$current_home/.docker" -R
           docker run hello-world
           docker --version  
 
