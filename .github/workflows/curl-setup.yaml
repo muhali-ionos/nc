@@ -32,10 +32,11 @@ jobs:
             sleep 10
           fi
           # Add the current user to the docker group
-          sudo usermod -aG docker runner
+          sudo usermod -aG docker $(whoami)
           # Restart the shell to apply group changes
-          exec sg docker newgrp `id -gn`
+          #exec sg docker newgrp `id -gn`
+          newgrp docker <<EONG
           # Verify Docker installation
           docker run hello-world
           docker --version  
-
+          EONG
