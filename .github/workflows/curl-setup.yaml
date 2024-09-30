@@ -9,5 +9,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         
-      - name: Setup curl
-        uses: kordlib/setup-curl@v1.0.0
+      - name: Install Curl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+
+      - name: Use Curl
+        run: curl --version
