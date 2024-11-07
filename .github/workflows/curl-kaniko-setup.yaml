@@ -1,0 +1,38 @@
+on:
+  workflow_dispatch:
+
+name: Curl-and-Kaniko-Installation
+jobs:
+  curl:
+    runs-on: arc-runners-nextcloud
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Install Curl
+        run: |
+          echo "The current user is: $current_user"
+          echo "The current home is: $current_home"
+          sudo apt-get update
+          sudo apt-get install -y curl ca-certificates
+          curl --version
+
+      - name: Install Kaniko
+        run: |
+          mkdir -p /kaniko/.docker
+          echo "{\"auths\":{\"$REGISTRY_URL\":{\"username\":\"$USERNAME\",\"password\":\"$PASSWORD\"}}}" > /kaniko/.docker/config.json
+          curl -LO https://github.com/GoogleContainerTools/kaniko/releases/download/v1.6.0/executor
+          chmod +x executor
+          mv executor /usr/local/bin/kaniko
+          which kaniko
+
+      #- name: Build and Push Image with Kaniko
+      #  env:
+      #    REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      #    USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+      #    PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      #  run: |
+      #    /usr/local/bin/kaniko \
+      #      --dockerfile=Dockerfile \
+      #      --context=dir://. \
+      #      --destination=$REGISTRY_URL/my-image:latest
