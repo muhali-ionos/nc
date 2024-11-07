@@ -27,6 +27,11 @@ jobs:
           chmod +x executor
           sudo mv executor /usr/local/bin/kaniko
           which kaniko
+
+      - name: Add Harbor Registry Certificate
+        run: |
+          sudo mkdir -p /etc/docker/certs.d/reg.1u1.it:443
+          echo "${{ secrets.HARBOR_CERTIFICATE }}" | sudo tee /etc/docker/certs.d/reg.1u1.it:443/ca.crt
           
       - name: Create Dockerfile for Test Image
         run: |
@@ -43,4 +48,4 @@ jobs:
             --dockerfile=Dockerfile \
             --context=dir://. \
             --destination=reg.1u1.it:443/itoah/kaniko-test:latest
-            --skip-tls-verify
+            #--skip-tls-verify
