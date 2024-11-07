@@ -8,8 +8,9 @@ on:
 
 jobs:
   package-code:
-    runs-on: self-hosted
-
+    #runs-on: self-hosted
+    runs-on: arc-runners-nextcloud
+    
     steps:
       - name: Install Git
         run: |
