@@ -44,8 +44,15 @@ jobs:
 
       - name: Build and Push Image with Kaniko
         run: |
-          /usr/local/bin/kaniko \
+          sudo /usr/local/bin/kaniko \
             --dockerfile=Dockerfile \
             --context=dir://. \
             --destination=reg.1u1.it:443/itoah/kaniko-test:latest
             #--skip-tls-verify
+          echo "Image is pushed to the Registry"
+            
+      - name: Verify Image Push
+        run: |
+          echo ${{ secrets.HARBOR_PASSWORD }} | docker login reg.1u1.it:443 -u ${{ secrets.HARBOR_USERNAME }} --password-stdin
+          docker pull reg.1u1.it:443/itoah/kaniko-test:latest
+          echo "image pulled successfully"
