@@ -20,10 +20,10 @@ jobs:
 
       - name: Install Kaniko
         run: |
-          sudo mkdir -p /kaniko/.docker
+          sudo mkdir -p $HOME/.docker
           echo "{\"auths\":{\"$REGISTRY_URL\":{\"username\":\"$USERNAME\",\"password\":\"$PASSWORD\"}}}" > /kaniko/.docker/config.json
-          sudo curl -LO https://github.com/GoogleContainerTools/kaniko/releases/download/v1.6.0/executor
-          sudo chmod +x executor
+          curl -LO https://github.com/GoogleContainerTools/kaniko/releases/download/v1.6.0/executor
+          chmod +x executor
           sudo mv executor /usr/local/bin/kaniko
           which kaniko
 
