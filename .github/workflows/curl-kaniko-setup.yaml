@@ -16,7 +16,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y curl ca-certificates
           curl --version
-          which curl
 
       - name: Install Kaniko
         run: |
@@ -25,8 +24,9 @@ jobs:
           #echo "{\"auths\":{\"$REGISTRY_URL\":{\"username\":\"$USERNAME\",\"password\":\"$PASSWORD\"}}}" > $HOME/.docker/config.json
           curl -LO https://github.com/GoogleContainerTools/kaniko/releases/download/v1.6.0/executor
           chmod +x executor
+          ls -l
           sudo mv executor /usr/local/bin/kaniko
-          which kaniko
+          ls -l /usr/local/bin/kaniko
 
       - name: Add Harbor Registry Certificate
         run: |
