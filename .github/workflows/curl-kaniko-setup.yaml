@@ -16,14 +16,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y curl ca-certificates
           curl --version
+          which curl
 
       - name: Install Kaniko
         run: |
-          mkdir -p /kaniko/.docker
+          sudo mkdir -p /kaniko/.docker
           echo "{\"auths\":{\"$REGISTRY_URL\":{\"username\":\"$USERNAME\",\"password\":\"$PASSWORD\"}}}" > /kaniko/.docker/config.json
-          curl -LO https://github.com/GoogleContainerTools/kaniko/releases/download/v1.6.0/executor
-          chmod +x executor
-          mv executor /usr/local/bin/kaniko
+          sudo curl -LO https://github.com/GoogleContainerTools/kaniko/releases/download/v1.6.0/executor
+          sudo chmod +x executor
+          sudo mv executor /usr/local/bin/kaniko
           which kaniko
 
       #- name: Build and Push Image with Kaniko
