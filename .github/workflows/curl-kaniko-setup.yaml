@@ -42,9 +42,10 @@ jobs:
 
       - name: Build and Push Image with Kaniko
         run: |
-          sudo /usr/local/bin/kaniko \
-            --dockerfile=Dockerfile \
-            --context=dir://. \
+          docker run \
+            -v $HOME/.docker:/kaniko/.docker \
+            -v $(pwd):/workspace \
+            gcr.io/kaniko-project/executor:latest \
             --destination=reg.1u1.it:443/itoah/kaniko-test:latest
             #--skip-tls-verify
           echo "Image is pushed to the Registry"
