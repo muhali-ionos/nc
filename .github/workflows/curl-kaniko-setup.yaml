@@ -21,11 +21,9 @@ jobs:
         run: |
           mkdir -p $HOME/.docker
           echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > $HOME/.docker/config.json
-          #echo "{\"auths\":{\"$REGISTRY_URL\":{\"username\":\"$USERNAME\",\"password\":\"$PASSWORD\"}}}" > $HOME/.docker/config.json
-          curl -LO https://github.com/GoogleContainerTools/kaniko/releases/download/v1.6.0/executor
-          chmod +x executor
-          ls -l
-          sudo mv executor /usr/local/bin/kaniko
+          curl -LO https://github.com/GoogleContainerTools/kaniko/releases/download/v1.6.0/executor-linux-amd64
+          chmod +x executor-linux-amd64
+          sudo mv executor-linux-amd64 /usr/local/bin/kaniko
           ls -l /usr/local/bin/kaniko
 
       - name: Add Harbor Registry Certificate
