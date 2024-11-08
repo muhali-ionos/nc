@@ -46,4 +46,4 @@ jobs:
       - name: Monitor Job Status
         run: |
           echo "Monitoring kaniko build job"
-          kubectl wait --for=condition=complete job/kaniko-build-job --namespace=arc-systems --timeout=600s
+          kubectl wait --for=condition=complete job/kaniko-build --timeout=600s
