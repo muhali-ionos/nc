@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
 
-name: Kaniko-Build-and-Push using k8s
+name: Kaniko-Build-and-Push
 jobs:
   build-and-push:
     runs-on: arc-runners-nextcloud
