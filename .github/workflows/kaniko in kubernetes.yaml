@@ -9,6 +9,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        id: install
+        with:
+          version: 'latest'         
+
       - name: Create Docker Config for Kaniko
         run: |
           mkdir -p $HOME/.docker
