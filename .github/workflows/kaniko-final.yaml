@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
 
-name: Kaniko-Build-and-Push
+name: Kaniko-Build-and-Push-Images-to-Harbor
 jobs:
   build-and-push:
     runs-on: arc-runners-nextcloud
