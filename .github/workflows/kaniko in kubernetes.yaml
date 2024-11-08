@@ -21,12 +21,14 @@ jobs:
           echo "RUN echo 'Hello, Kaniko!'" >> Dockerfile
 
       - name: Apply Kaniko Job
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG_LOCAL_K8s }}
         run: |
           kubectl apply -f kaniko-job.yaml
 
       - name: Monitor Job Status
-        #env:
-        #  KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG_LOCAL_K8s }}
         run: |
           echo "Monitoring kaniko build job"
           kubectl wait --for=condition=complete job/kaniko-build-job --namespace=arc-systems --timeout=600s
