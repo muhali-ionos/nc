@@ -36,6 +36,7 @@ jobs:
           
       - name: Use Dockerfile from Repository
         run: |
+          mkdir -p ./workspace
           cp ./Dockerfile ./workspace/Dockerfile
 
       - name: Apply Kaniko Job
