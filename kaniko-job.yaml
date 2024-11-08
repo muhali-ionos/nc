@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: kaniko-build
-  #namespace: arc-systems
+  namespace: arc-runners
 spec:
   template:
     spec:
@@ -15,14 +15,15 @@ spec:
         - --destination=reg.1u1.it:443/itoah/kaniko-test:latest
         - --skip-tls-verify
         volumeMounts:
-        - name: workspace
+        - name: dockerfile-config
           mountPath: /workspace
         - name: docker-config
           mountPath: /kaniko/.docker
       restartPolicy: Never
       volumes:
-      - name: workspace
-        emptyDir: {}
+      - name: dockerfile-config
+        configMap:
+          name: dockerfile-config
       - name: docker-config
         secret:
           secretName: docker-config
