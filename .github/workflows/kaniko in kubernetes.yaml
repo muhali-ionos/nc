@@ -16,6 +16,8 @@ jobs:
           version: 'latest'         
 
       - name: Create Docker Config for Kaniko
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG_LOCAL_K8s }}
         run: |
           mkdir -p $HOME/.docker
           echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > $HOME/.docker/config.json
