@@ -13,7 +13,6 @@ spec:
         - --dockerfile=/workspace/Dockerfile
         - --context=dir:///workspace
         - --destination=reg.1u1.it:443/itoah/kaniko-test:latest
-        - --skip-tls-verify
         volumeMounts:
         - name: dockerfile-config
           mountPath: /workspace
