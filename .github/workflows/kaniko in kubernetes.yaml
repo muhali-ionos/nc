@@ -19,7 +19,7 @@ jobs:
         run: |
           mkdir -p $HOME/.docker
           echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > $HOME/.docker/config.json
-          kubectl create secret generic docker-config --from-file=config.json=$HOME/.docker/config.json -n arc-systems
+          kubectl create secret generic docker-config --from-file=config.json=$HOME/.docker/config.json
 
       - name: Create Dockerfile for Test Image
         run: |
