@@ -34,10 +34,10 @@ jobs:
           fi
           set -e
           
-      - name: Use Dockerfile from Repository
+      - name: Create and Apply Kaniko Job
         run: |
-          mkdir -p ./workspace
-          cp ./Dockerfile ./workspace/Dockerfile
+          # Delete existing job if exists
+          kubectl delete job kaniko-build --namespace=arc-runners --ignore-not-found
 
       - name: Apply Kaniko Job
         run: |
