@@ -1,0 +1,58 @@
+on:
+  workflow_dispatch:
+
+name: Kaniko-Build-and-Push
+jobs:
+  build-and-push:
+    runs-on: arc-runners-nextcloud
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        id: install
+        with:
+          version: 'latest'  
+
+      - name: Setup KUBECONFIG
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+          export KUBECONFIG=$HOME/.kube/config
+
+      - name: Add Harbor Registry Certificate
+        run: |
+          sudo mkdir -p /etc/docker/certs.d/reg.1u1.it:443
+          echo "${{ secrets.HARBOR_CERTIFICATE }}" | sudo tee /etc/docker/certs.d/reg.1u1.it:443/ca.crt
+
+      - name: Create Docker Config for Kaniko
+        run: |
+          mkdir -p $HOME/.docker
+          echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > $HOME/.docker/config.json
+          set +e
+          kubectl get secret docker-config
+          if [ $? -ne 0 ]; then
+            kubectl create secret generic docker-config --from-file=config.json=$HOME/.docker/config.json --namespace=arc-systems
+          else
+            echo "Secret docker-config already exists, skipping creation."
+          fi
+          set -e
+          
+      - name: Create and Apply Kaniko Job
+        run: |
+          # Delete existing job if exists
+          kubectl delete job kaniko-build --namespace=arc-runners --ignore-not-found
+          kubectl apply -f kaniko-job.yaml
+          echo "Image is pushed to the Registry"
+
+      - name: Monitor Job Status
+        run: |
+          echo "Monitoring kaniko build job"
+          kubectl wait --for=condition=complete job/kaniko-build --timeout=600s
+
+      - name: Verify Image Push
+        run: |
+          echo ${{ secrets.HARBOR_PASSWORD }} | docker login reg.1u1.it:443 -u ${{ secrets.HARBOR_USERNAME }} --password-stdin
+          docker pull reg.1u1.it:443/itoah/kaniko-test:latest
+          echo "image pulled successfully"
