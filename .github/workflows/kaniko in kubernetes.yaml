@@ -15,13 +15,13 @@ jobs:
         with:
           version: 'latest'         
 
-      - name: Create Docker Config for Kaniko
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG_LOCAL_K8s }}
-        run: |
-          mkdir -p $HOME/.docker
-          echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > $HOME/.docker/config.json
-          kubectl create secret generic docker-config --from-file=config.json=$HOME/.docker/config.json
+      #- name: Create Docker Config for Kaniko
+      #  env:
+      #    KUBECONFIG: ${{ secrets.KUBECONFIG_LOCAL_K8s }}
+      #  run: |
+      #    mkdir -p $HOME/.docker
+      #    echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > $HOME/.docker/config.json
+      #    kubectl create secret generic docker-config --from-file=config.json=$HOME/.docker/config.json
 
       - name: Create Dockerfile for Test Image
         run: |
@@ -30,13 +30,13 @@ jobs:
 
       - name: Apply Kaniko Job
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG_LOCAL_K8s }}
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
           kubectl apply -f kaniko-job.yaml
 
       - name: Monitor Job Status
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG_LOCAL_K8s }}
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
           echo "Monitoring kaniko build job"
           kubectl wait --for=condition=complete job/kaniko-build-job --namespace=arc-systems --timeout=600s
