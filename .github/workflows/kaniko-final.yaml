@@ -45,14 +45,3 @@ jobs:
         run: |
           echo "Monitoring kaniko build job"
           kubectl wait --for=condition=complete job/kaniko-build --timeout=600s
-
-      - name: Add Harbor Registry Certificate
-        run: |
-          sudo mkdir -p /etc/docker/certs.d/reg.1u1.it:443
-          echo "${{ secrets.HARBOR_CERTIFICATE }}" | sudo tee /etc/docker/certs.d/reg.1u1.it:443/ca.crt
-
-      - name: Verify Image Push
-        run: |
-          echo ${{ secrets.HARBOR_PASSWORD }} | docker login reg.1u1.it:443 -u ${{ secrets.HARBOR_USERNAME }} --password-stdin
-          docker pull reg.1u1.it:443/itoah/kaniko-test:latest
-          echo "image pulled successfully"
