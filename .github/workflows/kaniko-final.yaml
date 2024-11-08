@@ -21,11 +21,6 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
           export KUBECONFIG=$HOME/.kube/config
 
-      - name: Add Harbor Registry Certificate
-        run: |
-          sudo mkdir -p /etc/docker/certs.d/reg.1u1.it:443
-          echo "${{ secrets.HARBOR_CERTIFICATE }}" | sudo tee /etc/docker/certs.d/reg.1u1.it:443/ca.crt
-
       - name: Create Docker Config for Kaniko
         run: |
           mkdir -p $HOME/.docker
