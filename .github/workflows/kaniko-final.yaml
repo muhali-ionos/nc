@@ -15,6 +15,25 @@ jobs:
         with:
           version: 'latest'  
 
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          repository: IONOS-Productivity/nc-server
+          ref: master
+
+      - name: Package Code
+        run: |
+          mkdir -p /tmp/nc-server
+          cp -r . /tmp/nc-server
+          cd /tmp/nc-server
+          tar -czvf /tmp/nc-server.tar.gz .
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nc-server-package
+          path: /tmp/nc-server.tar.gz   
+          
       - name: Setup KUBECONFIG
         run: |
           mkdir -p $HOME/.kube
@@ -38,7 +57,7 @@ jobs:
         run: |
           # Delete existing job if exists
           kubectl delete job kaniko-build --namespace=arc-runners --ignore-not-found
-          kubectl apply -f kaniko-job.yaml
+          kubectl apply -f kaniko-nc-job.yaml
           echo "Image is pushed to the Registry"
 
       - name: Monitor Job Status
