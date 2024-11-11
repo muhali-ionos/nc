@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kaniko-nc-build
+  namespace: arc-runners
+spec:
+  template:
+    spec:
+      containers:
+      - name: kaniko
+        image: gcr.io/kaniko-project/executor:latest
+        args:
+        - --dockerfile=/workspace/Dockerfile
+        - --context=dir:///workspace
+        - --destination=reg.1u1.it:443/itoah/kaniko-nc-test:latest
+        - --skip-tls-verify
+        volumeMounts:
+        - name: dockerfile-config
+          mountPath: /workspace
+        - name: docker-config
+          mountPath: /kaniko/.docker
+      restartPolicy: Never
+      volumes:
+      - name: dockerfile-config
+        configMap:
+          name: dockerfile-config
+      - name: docker-config
+        secret:
+          secretName: docker-config
+  backoffLimit: 1
