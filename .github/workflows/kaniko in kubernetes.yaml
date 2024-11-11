@@ -17,6 +17,7 @@ jobs:
 
       - name: Setup KUBECONFIG
         run: |
+          pwd
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
           export KUBECONFIG=$HOME/.kube/config
