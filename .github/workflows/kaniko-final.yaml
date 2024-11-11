@@ -24,11 +24,13 @@ jobs:
       - name: Package Code
         run: |
           pwd
+          ls -l
           echo $HOME
+          ls -l
           mkdir -p /tmp/nc-server
           cp -r . /tmp/nc-server
-          # cd /tmp/nc-server
-          tar -czf /tmp/nc-server.tar.gz /tmp/nc-server/*
+          cd /tmp/nc-server
+          tar -czf /tmp/nc-server.tar.gz .
 
       #- name: Upload Artifact
       #  uses: actions/upload-artifact@v4
@@ -54,7 +56,7 @@ jobs:
             echo "Secret docker-config already exists, skipping creation."
           fi
           set -e
-          
+        
       - name: Create Dockerfile Config for Kaniko
         run: |
           # cd /tmp/nc-server/.devcontainer
@@ -66,7 +68,10 @@ jobs:
             echo "Configmap dockerfile-config already exists, skipping creation."
           fi
           set -e 
-          
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Create and Apply Kaniko Job
         run: |
           # Delete existing job if exists
