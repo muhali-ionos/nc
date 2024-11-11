@@ -26,8 +26,8 @@ jobs:
           pwd
           mkdir -p /tmp/nc-server
           cp -r . /tmp/nc-server
-          cd /tmp/nc-server
-          tar -czf /tmp/nc-server.tar.gz .
+          # cd /tmp/nc-server
+          tar -czf /tmp/nc-server.tar.gz /tmp/nc-server/*
 
       #- name: Upload Artifact
       #  uses: actions/upload-artifact@v4
@@ -53,14 +53,14 @@ jobs:
             echo "Secret docker-config already exists, skipping creation."
           fi
           set -e
-          
+          /home/runner/_work/nc/nc
       - name: Create Dockerfile Config for Kaniko
         run: |
-          cd /tmp/nc-server/.devcontainer
+          # cd /tmp/nc-server/.devcontainer
           set +e
           kubectl get cm dockerfile-config
           if [ $? -ne 0 ]; then
-            kubectl create configmap dockerfile-config --from-file=Dockerfile=./Dockerfile --namespace=arc-runners            
+            kubectl create configmap dockerfile-config --from-file=Dockerfile=/tmp/nc-server/.devcontainer/Dockerfile --namespace=arc-runners            
           else
             echo "Configmap dockerfile-config already exists, skipping creation."
           fi
