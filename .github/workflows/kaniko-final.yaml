@@ -69,7 +69,7 @@ jobs:
         run: |
           # Delete existing job if exists
           kubectl delete job kaniko-nc-build --namespace=arc-runners --ignore-not-found
-          kubectl apply -f kaniko-nc-job.yaml
+          kubectl apply -f kaniko-job.yaml
           echo "Nextcloud Image is pushed to the Harbor Registry."
 
       - name: Monitor Job Status
