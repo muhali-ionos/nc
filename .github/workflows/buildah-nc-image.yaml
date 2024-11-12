@@ -79,6 +79,6 @@ jobs:
       - name: Monitor Job Status
         run: |
           echo "Monitoring Nextcloud build job."
-          kubectl wait --for=condition=complete job/buildah-nc-build --timeout=600s
+          kubectl wait --for=condition=complete job/buildah-nc-build --timeout=720s
           echo "Nextcloud Image is pushed to the Harbor Registry."
           echo "All tasks completed gracefully."
