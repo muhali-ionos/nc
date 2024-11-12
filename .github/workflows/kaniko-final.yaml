@@ -23,10 +23,6 @@ jobs:
 
       - name: Package Code
         run: |
-          pwd
-          ls -l
-          echo $HOME
-          ls -l
           mkdir -p /tmp/nc-server
           cp -r . /tmp/nc-server
           cd /tmp/nc-server
