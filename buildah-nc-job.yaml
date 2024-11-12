@@ -12,7 +12,7 @@ spec:
         securityContext:
           runAsUser: 1000  # Example non-root user
           allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
+          #readOnlyRootFilesystem: true
           capabilities:
             drop: ["ALL"]  # Start with all capabilities dropped
             add: ["CHOWN", "SETUID", "SETGID"]  # Add only necessary capabilities
