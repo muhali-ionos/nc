@@ -10,8 +10,12 @@ spec:
       - name: buildah
         image: quay.io/buildah/stable:latest
         securityContext:
+          runAsUser: 1000  # Example non-root user
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
           capabilities:
-            add: ["SETFCAP", "FOWNER", "DAC_OVERRIDE", "CHOWN", "SETUID", "SETGID"]
+            drop: ["ALL"]  # Start with all capabilities dropped
+            add: ["CHOWN", "SETUID", "SETGID"]  # Add only necessary capabilities
         command:
         - buildah
         - bud
