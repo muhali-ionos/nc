@@ -11,7 +11,7 @@ spec:
         image: quay.io/buildah/stable:latest
         securityContext:
           capabilities:
-            add: ["SETFCAP", "FOWNER", "DAC_OVERRIDE"]
+            add: ["SETFCAP", "FOWNER", "DAC_OVERRIDE", "CHOWN", "SETUID", "SETGID", "SYS_ADMIN"]
         command:
         - buildah
         - bud
