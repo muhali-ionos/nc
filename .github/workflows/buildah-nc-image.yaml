@@ -1,0 +1,84 @@
+on:
+  workflow_dispatch:
+
+name: Nextcloud-Build-and-Push-Images-with-Buildah
+jobs:
+  build-and-push:
+    runs-on: arc-runners-nextcloud
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        id: install
+        with:
+          version: 'latest'  
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          repository: IONOS-Productivity/nc-server
+          ref: master
+
+      - name: Package Code
+        run: |
+          mkdir -p /tmp/nc-server
+          cp -r . /tmp/nc-server
+          cd /tmp/nc-server
+          tar -czf /tmp/nc-server.tar.gz .
+
+      #- name: Upload Artifact
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: nc-server-package
+      #    path: /tmp/nc-server.tar.gz   
+          
+      - name: Setup KUBECONFIG
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+          export KUBECONFIG=$HOME/.kube/config
+
+      - name: Create Docker Secret Config for Buildah
+        run: |
+          mkdir -p $HOME/.docker
+          echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > $HOME/.docker/config.json
+          set +e
+          kubectl get secret docker-config
+          if [ $? -ne 0 ]; then
+            kubectl create secret generic docker-config --from-file=config.json=$HOME/.docker/config.json --namespace=arc-systems
+          else
+            echo "Secret docker-config already exists, skipping creation."
+          fi
+          set -e
+        
+      - name: Create Dockerfile Config for Buildah
+        run: |
+          set +e
+          kubectl get cm dockerfile-config
+          if [ $? -ne 0 ]; then
+            kubectl create configmap dockerfile-config --from-file=Dockerfile=/tmp/nc-server/.devcontainer/Dockerfile --namespace=arc-runners            
+          else
+            echo "Configmap dockerfile-config already exists, skipping creation."
+          fi
+          set -e 
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Create and Apply Buildah Job
+        run: |
+          # Delete existing job if exists
+          kubectl delete job buildah-nc-build --namespace=arc-runners --ignore-not-found
+          pwd
+          ls -l
+          kubectl apply -f buildah-nc-job.yaml
+          
+
+      - name: Monitor Job Status
+        run: |
+          echo "Monitoring Nextcloud build job."
+          kubectl wait --for=condition=complete job/buildah-nc-build --timeout=600s
+          echo "Nextcloud Image is pushed to the Harbor Registry."
+          echo "All tasks completed gracefully."
