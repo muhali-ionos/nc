@@ -32,11 +32,11 @@ jobs:
           cd /tmp/nc-server
           tar -czf /tmp/nc-server.tar.gz .
 
-      #- name: Upload Artifact
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #    name: nc-server-package
-      #    path: /tmp/nc-server.tar.gz   
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nc-server-package
+          path: /tmp/nc-server.tar.gz   
           
       - name: Setup KUBECONFIG
         run: |
