@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
 
-name: Nextcloud-Build-and-Push-Images-with-Buildah
+name: Nextcloud-Build-and-Push-with-Buildah
 jobs:
   build-and-push:
     runs-on: arc-runners-nextcloud
