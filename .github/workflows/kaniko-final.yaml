@@ -75,10 +75,10 @@ jobs:
           pwd
           ls -l
           kubectl apply -f kaniko-nc-job.yaml
-          echo "Nextcloud Image is pushed to the Harbor Registry."
 
       - name: Monitor Job Status
         run: |
           echo "Monitoring Nextcloud build job."
           kubectl wait --for=condition=complete job/kaniko-nc-build --timeout=600s
+          echo "Nextcloud Image is pushed to the Harbor Registry."
           echo "All tasks completed gracefully."
