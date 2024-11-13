@@ -15,12 +15,14 @@ spec:
         - --destination=reg.1u1.it:443/itoah/kaniko-nc-test:latest
         - --skip-tls-verify
         volumeMounts:
-        - name: kaniko-workspace
-          mountPath: /workspace
+        #- name: kaniko-workspace
+        #  mountPath: /workspace
         - name: dockerfile-config
           mountPath: /workspace/Dockerfile
         - name: docker-config
           mountPath: /kaniko/.docker
+      nodeSelector:
+        cert-manager: true
       restartPolicy: Never
       volumes:
       - name: dockerfile-config
@@ -29,7 +31,7 @@ spec:
       - name: docker-config
         secret:
           secretName: docker-config
-      - name: kaniko-workspace
-        persistentVolumeClaim:
-          claimName: kaniko-pvc
+      #- name: kaniko-workspace
+        #persistentVolumeClaim:
+          #claimName: kaniko-pvc
   backoffLimit: 1
