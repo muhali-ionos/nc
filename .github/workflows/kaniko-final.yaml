@@ -23,10 +23,6 @@ jobs:
 
       - name: Package Code
         run: |
-          pwd
-          ls -l
-          echo $HOME
-          ls -l
           mkdir -p /tmp/nc-server
           cp -r . /tmp/nc-server
           cd /tmp/nc-server
@@ -78,11 +74,11 @@ jobs:
           kubectl delete job kaniko-nc-build --namespace=arc-runners --ignore-not-found
           pwd
           ls -l
-          kubectl apply -f kaniko-nc-job.yaml
-          echo "Nextcloud Image is pushed to the Harbor Registry."
+          kubectl apply -f kaniko-nc-job.yaml          
 
       - name: Monitor Job Status
         run: |
           echo "Monitoring Nextcloud build job."
           kubectl wait --for=condition=complete job/kaniko-nc-build --timeout=600s
+          echo "Nextcloud Image is pushed to the Harbor Registry."
           echo "All tasks completed gracefully."
