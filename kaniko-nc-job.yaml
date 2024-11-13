@@ -9,19 +9,16 @@ spec:
       containers:
       - name: kaniko
         image: gcr.io/kaniko-project/executor:latest
-        resources:
-          requests:
-            ephemeral-storage: "4Gi"  # Adjust this value based on your needs
-          limits:
-            ephemeral-storage: "10Gi"  # Limit can be higher to prevent excessive usag
         args:
         - --dockerfile=/workspace/Dockerfile
         - --context=dir:///workspace
         - --destination=reg.1u1.it:443/itoah/kaniko-nc-test:latest
         - --skip-tls-verify
         volumeMounts:
-        - name: dockerfile-config
+        - name: kaniko-workspace
           mountPath: /workspace
+        - name: dockerfile-config
+          mountPath: /workspace/Dockerfile
         - name: docker-config
           mountPath: /kaniko/.docker
       restartPolicy: Never
@@ -32,4 +29,7 @@ spec:
       - name: docker-config
         secret:
           secretName: docker-config
+      - name: kaniko-workspace
+        persistentVolumeClaim:
+          claimName: kaniko-pvc
   backoffLimit: 1
