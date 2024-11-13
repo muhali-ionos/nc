@@ -9,6 +9,17 @@ spec:
       containers:
       - name: kaniko
         image: gcr.io/kaniko-project/executor:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          # Pre-build cleanup
+          echo "Cleaning up pre-existing temporary files..."
+          rm -rf /workspace/*
+        resources:
+          requests:
+            ephemeral-storage: "4Gi"  # Adjust this value based on your needs
+          limits:
+            ephemeral-storage: "10Gi"  # Limit can be higher to prevent excessive usag
         args:
         - --dockerfile=/workspace/Dockerfile
         - --context=dir:///workspace
