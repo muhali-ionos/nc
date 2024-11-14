@@ -19,6 +19,7 @@ spec:
           mountPath: /workspace
         - name: dockerfile-config
           mountPath: /workspace/Dockerfile
+          subPath: Dockerfile
         - name: docker-config
           mountPath: /kaniko/.docker
       affinity:
