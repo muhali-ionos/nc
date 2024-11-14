@@ -28,11 +28,11 @@ jobs:
           cd /tmp/nc-server
           tar -czf /tmp/nc-server.tar.gz .
 
-      #- name: Upload Artifact
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #    name: nc-server-package
-      #    path: /tmp/nc-server.tar.gz   
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nc-server-package
+          path: /tmp/nc-server.tar.gz   
           
       - name: Setup KUBECONFIG
         run: |
@@ -81,4 +81,8 @@ jobs:
           echo "Monitoring Nextcloud build job."
           kubectl wait --for=condition=complete job/kaniko-nc-build --timeout=1200s
           echo "Nextcloud Image is pushed to the Harbor Registry."
+          
+      - name: Delete Kaniko Job
+        run: |
+          kubectl delete job kaniko-nc-build --namespace=arc-runners --ignore-not-found
           echo "All tasks completed gracefully."
