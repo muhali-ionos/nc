@@ -15,11 +15,12 @@ spec:
         - --destination=reg.1u1.it:443/itoah/kaniko-nc-test:latest
         - --skip-tls-verify
         volumeMounts:
-        - name: kaniko-workspace
-          mountPath: /workspace
+        #- name: kaniko-workspace              #### In case of PV
+        #  mountPath: /workspace               #### In case of PV
         - name: dockerfile-config
-          mountPath: /workspace/Dockerfile
-          subPath: Dockerfile
+          mountPath: /workspace
+        #  mountPath: /workspace/Dockerfile    #### In case of PV
+        #  subPath: Dockerfile                 #### In case of PV
         - name: docker-config
           mountPath: /kaniko/.docker
       affinity:
@@ -39,7 +40,7 @@ spec:
       - name: docker-config
         secret:
           secretName: docker-config
-      - name: kaniko-workspace
-        persistentVolumeClaim:
-          claimName: kaniko-pvc
+      #- name: kaniko-workspace                 #### In case of PV
+      #  persistentVolumeClaim:                 #### In case of PV
+      #    claimName: kaniko-pvc                #### In case of PV
   backoffLimit: 1
