@@ -47,7 +47,7 @@ jobs:
           set +e
           kubectl get secret docker-config
           if [ $? -ne 0 ]; then
-            kubectl create secret generic docker-config --from-file=config.json=$HOME/.docker/config.json --namespace=arc-systems
+            kubectl create secret generic docker-config --from-file=config.json=$HOME/.docker/config.json --namespace=arc-runners
           else
             echo "Secret docker-config already exists, skipping creation."
           fi
