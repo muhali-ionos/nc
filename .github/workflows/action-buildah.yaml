@@ -32,8 +32,9 @@ jobs:
       #  run: |
       #    echo ${{ secrets.HARBOR_PASSWORD }} | buildah login reg.1u1.it:443 -u ${{ secrets.HARBOR_USERNAME }} --password-stdin
 
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Install Buildah
+        run: | 
+          sudo apt-get -qq -y install buildah  
         
       - name: Buildah Action
         uses: redhat-actions/buildah-build@v2
