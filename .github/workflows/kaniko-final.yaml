@@ -85,4 +85,6 @@ jobs:
       - name: Delete Kaniko Job
         run: |
           kubectl delete job kaniko-nc-build --namespace=arc-runners --ignore-not-found
+          kubectl delete secret -n arc-runners docker-config
+          kubectl delete cm -n arc-runners dockerfile-config
           echo "All tasks completed gracefully."
