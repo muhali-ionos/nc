@@ -12,7 +12,7 @@ spec:
         args:
         - --dockerfile=/workspace/Dockerfile
         - --context=dir:///workspace
-        - --destination=reg.1u1.it:443/itoah/kaniko-nc-test:latest
+        - --destination=reg.1u1.it:443/itoah/drive-nc-test:latest
         - --skip-tls-verify
         volumeMounts:
         - name: dockerfile-config
