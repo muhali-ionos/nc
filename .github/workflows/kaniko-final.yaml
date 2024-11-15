@@ -28,16 +28,16 @@ jobs:
           cd /tmp/nc-server
           tar -czf /tmp/nc-server.tar.gz .
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: nc-server-package
-          path: /tmp/nc-server.tar.gz   
+      #- name: Upload Artifact
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: nc-server-package
+      #    path: /tmp/nc-server.tar.gz   
           
       - name: Setup KUBECONFIG
         run: |
           mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG_AISLAB }}" > $HOME/.kube/config
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
           cat $HOME/.kube/config
           export KUBECONFIG=$HOME/.kube/config
 
