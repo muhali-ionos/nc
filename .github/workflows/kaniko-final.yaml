@@ -37,7 +37,8 @@ jobs:
       - name: Setup KUBECONFIG
         run: |
           mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+          echo "${{ secrets.KUBECONFIG_AISLAB }}" > $HOME/.kube/config
+          cat $HOME/.kube/config
           export KUBECONFIG=$HOME/.kube/config
 
       - name: Create Docker Secret Config for Kaniko
