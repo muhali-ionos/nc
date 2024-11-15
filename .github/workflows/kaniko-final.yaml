@@ -4,7 +4,7 @@ on:
 name: Nextcloud-Build-and-Push-Images-to-Harbor
 jobs:
   build-and-push:
-    runs-on: arc-runners-nextcloud
+    runs-on: arc-runners-hi-drive
     steps:
       - name: Checkout
         uses: actions/checkout@v4
