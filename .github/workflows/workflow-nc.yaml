@@ -71,20 +71,20 @@ jobs:
       - name: Create and Apply Kaniko Job
         run: |
           # Delete existing job if exists
-          kubectl delete job kaniko-nc-build --namespace=arc-runners --ignore-not-found
+          kubectl delete job kaniko-nc-build-push --namespace=arc-runners --ignore-not-found
           pwd
           ls -l
-          kubectl apply -f kaniko-nc-job.yaml          
+          kubectl apply -f kaniko-build-push.yaml          
 
       - name: Monitor Job Status
         run: |
           echo "Monitoring Nextcloud build job."
-          kubectl wait --for=condition=complete job/kaniko-nc-build --timeout=1200s
+          kubectl wait --for=condition=complete job/kaniko-nc-build-push --timeout=1200s
           echo "Nextcloud Image is pushed to the Harbor Registry."
           
       - name: Delete Kaniko Job
         run: |
-          kubectl delete job kaniko-nc-build --namespace=arc-runners --ignore-not-found
+          kubectl delete job kaniko-nc-build-push --namespace=arc-runners --ignore-not-found
           kubectl delete secret -n arc-runners docker-config
           kubectl delete cm -n arc-runners dockerfile-config
           echo "All tasks completed gracefully."
