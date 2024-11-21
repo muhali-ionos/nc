@@ -4,16 +4,16 @@ on:
 name: Drive-NC-build-push
 jobs:
   build-and-push:
-    runs-on: arc-runners-hi-drive
+    runs-on: k8s-gha-runner-1
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Make
-        run: sudo apt-get update && sudo apt-get install -y make
+      #- name: Install Make
+      #  run: sudo apt-get update && sudo apt-get install -y make
 
-      - name: Verify Make Installation
-        run: make --version  
+      #- name: Verify Make Installation
+      #  run: make --version  
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v4
