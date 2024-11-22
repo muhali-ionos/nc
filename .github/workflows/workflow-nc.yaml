@@ -4,7 +4,7 @@ on:
 name: Drive-NC-build-push
 jobs:
   build-and-push:
-    runs-on: k8s-gha-runner-1
+    runs-on: arc-runners-hi-drive-nc
     steps:
       - name: Checkout
         uses: actions/checkout@v4
