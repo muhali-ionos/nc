@@ -42,17 +42,17 @@ jobs:
         run: |
           echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > /kaniko/.docker/config.json
 
-      - name: Build and Push Docker Image with Kaniko
-        uses: docker://gcr.io/kaniko-project/executor:latest
-        with:
-          args: >
-            --dockerfile=./devcontainer/Dockerfile
-            --context=.
-            --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
-            --cache=true
-            --cache-copy-layers=true
-            --cache-ttl=24h
-            --skip-tls-verify
+      #- name: Build and Push Docker Image with Kaniko
+      #  uses: docker://gcr.io/kaniko-project/executor:latest
+      #  with:
+      #    args: >
+      #      --dockerfile=./devcontainer/Dockerfile
+      #      --context=.
+      #      --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
+      #      --cache=true
+      #      --cache-copy-layers=true
+      #      --cache-ttl=24h
+      #      --skip-tls-verify
 
       - name: Build and Push Docker Image with Kaniko
         uses: docker://gcr.io/kaniko-project/executor:latest
