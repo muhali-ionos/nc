@@ -22,27 +22,30 @@ jobs:
           repository: IONOS-Productivity/nc-server
           ref: master
 
-      - name: Package Code
-        run: |
-          pwd
-          ls -la
-          #mkdir -p /tmp/nc-server
-          #cp -r . /tmp/nc-server
-          #cd /tmp/nc-server
-          tar -czf /tmp/nc-server.tar.gz ../nc/
-          ls -lh /tmp/nc-server.tar.gz
+      #- name: Package Code
+      #  run: |
+      #    pwd
+      #    ls -la
+      #    #mkdir -p /tmp/nc-server
+      #    #cp -r . /tmp/nc-server
+      #    #cd /tmp/nc-server
+      #    tar -czf /tmp/nc-server.tar.gz ../nc/
+      #    ls -lh /tmp/nc-server.tar.gz
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: nc-server-package
-          path: /tmp/nc-server.tar.gz   
+      #- name: Upload Artifact
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: nc-server-package
+      #    path: /tmp/nc-server.tar.gz   
 
       - name: Set up Docker credentials
         run: |
+          pwd
+          ls -la
           mkdir -p /tmp/kaniko/.docker 
           echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > /tmp/kaniko/.docker/config.json
-
+          cat /tmp/kaniko/.docker/config.json
+          
       - name: Build and Push Docker Image with Kaniko
         uses: docker://gcr.io/kaniko-project/executor:latest
         with:
