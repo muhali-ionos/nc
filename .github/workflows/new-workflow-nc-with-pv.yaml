@@ -9,12 +9,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Make
+      - name: Print contents
         run: |
           pwd
-          ls -l
-          sudo apt-get update && sudo apt-get install -y make
-          make --version  
+          ls -la
+          #sudo apt-get update && sudo apt-get install -y make
+          #make --version  
 
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -25,20 +25,18 @@ jobs:
       - name: Package Code
         run: |
           pwd
-          ls -l
+          ls -la
           #mkdir -p /tmp/nc-server
           #cp -r . /tmp/nc-server
           #cd /tmp/nc-server
-          tar -czf /tmp/nc-server.tar.gz .
+          tar -czf /tmp/nc-server.tar.gz ../nc/
+          ls -lh /tmp/nc-server.tar.gz
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: nc-server-package
-          path: ./nc-server.tar.gz   
+          path: /tmp/nc-server.tar.gz   
+        
           
-      - name: Package Code
-        run: |
-          pwd
-          ls -lh ./nc-server.tar.gz
           
