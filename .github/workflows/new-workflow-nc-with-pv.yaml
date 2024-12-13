@@ -48,7 +48,7 @@ jobs:
           {
             "auths": {
               "reg.1u1.it:443": {
-                "auth": "$(echo -n "${{ secrets.HARBOR_USERNAME }}:${{ secrets.HARBOR_PASSWORD }}" | base64 -W0)"
+                "auth": "$(echo -n "${{ secrets.HARBOR_USERNAME }}:${{ secrets.HARBOR_PASSWORD }}" | base64 -w0)"
               }
             }
           }
