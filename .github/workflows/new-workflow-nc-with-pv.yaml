@@ -67,10 +67,6 @@ jobs:
             --dockerfile=./.devcontainer/Dockerfile 
             --context=.
             --tarPath=/tmp/image.tar
-            #--destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
-            #--cache=true
-            #--cache-copy-layers=true
-            #--cache-ttl=24h
             --skip-tls-verify
       - name: List Image
         run: |
