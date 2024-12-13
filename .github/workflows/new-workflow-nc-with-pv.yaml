@@ -43,8 +43,10 @@ jobs:
           pwd
           ls -la
           sudo mkdir -p /kaniko/.docker 
-          sudo echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > /kaniko/.docker/config.json
-          #docker login reg.1u1.it:443 -u "${{ secrets.HARBOR_USERNAME }}" -p "${{ secrets.HARBOR_PASSWORD }}"
+          #sudo echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > /kaniko/.docker/config.json
+          docker login reg.1u1.it:443 -u "${{ secrets.HARBOR_USERNAME }}" -p "${{ secrets.HARBOR_PASSWORD }}"
+          sudo cat ~/.docker/config.json
+          sudo cp -a ~/.docker/config.json /kaniko/.docker/
           sudo cat /kaniko/.docker/config.json
           
       - name: Build and Push Docker Image with Kaniko
