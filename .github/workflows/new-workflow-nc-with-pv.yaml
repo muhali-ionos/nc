@@ -1,0 +1,44 @@
+on:
+  workflow_dispatch:
+
+name: New-Modified-Hi-Drive-Build-NC
+jobs:
+  build-and-push:
+    runs-on: self-hosted-nc
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Make
+        run: |
+          pwd
+          ls -l
+          sudo apt-get update && sudo apt-get install -y make
+          make --version  
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          repository: IONOS-Productivity/nc-server
+          ref: master
+
+      - name: Package Code
+        run: |
+          pwd
+          ls -l
+          #mkdir -p /tmp/nc-server
+          #cp -r . /tmp/nc-server
+          #cd /tmp/nc-server
+          tar -czf /tmp/nc-server.tar.gz .
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nc-server-package
+          path: ./nc-server.tar.gz   
+          
+      - name: Package Code
+        run: |
+          pwd
+          ls -lh ./nc-server.tar.gz
+          
