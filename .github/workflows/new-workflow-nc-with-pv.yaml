@@ -47,7 +47,7 @@ jobs:
         uses: docker://gcr.io/kaniko-project/executor:latest
         with:
           args: >
-            --dockerfile=./devcontainer/Dockerfile
+            --dockerfile=./.devcontainer/Dockerfile 
             --context=.
             --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
             --cache=true
