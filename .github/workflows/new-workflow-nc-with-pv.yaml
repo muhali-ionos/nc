@@ -38,14 +38,16 @@ jobs:
       #    name: nc-server-package
       #    path: /tmp/nc-server.tar.gz   
 
-
-      - name: Environment Credentials
-        env:
-          USERNAME: ${{ secrets.HARBOR_USERNAME }}
-          PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+      - name: Set up Docker credentials
         run: |
           pwd
-          ls -la
+          #ls -la
+          echo $HOME
+          mkdir -p $HOME/.docker 
+          ls -l $HOME/.docker
+          echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > $HOME/.docker/config.json
+          echo "checking contents"
+          cat $HOME/.docker/config.json
           
       - name: Build and Push Docker Image with Kaniko
         uses: docker://gcr.io/kaniko-project/executor:v1.20.0
