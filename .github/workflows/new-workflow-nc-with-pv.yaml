@@ -38,27 +38,33 @@ jobs:
       #    name: nc-server-package
       #    path: /tmp/nc-server.tar.gz   
 
-      - name: Set up Docker credentials
-        run: |
+      #- name: Set up Docker credentials
+      #  run: |
           #pwd
           #ls -la
-          sudo mkdir -p /kaniko/.docker 
-          sudo ls -l /kaniko/.docker
-          sudo bash -c 'cat <<EOF > /kaniko/.docker/config.json
-          {
-            "auths": {
-              "https://reg.1u1.it:443/": {
-                "auth": "$(echo -n "${{ secrets.HARBOR_USERNAME }}:${{ secrets.HARBOR_PASSWORD }}" | base64)"
-              }
-            }
-          }
-          EOF'
-          echo "listing contents"
-          sudo ls -l /kaniko/.docker/
+          #sudo mkdir -p /kaniko/.docker 
+          #sudo ls -l /kaniko/.docker
+          #sudo bash -c 'cat <<EOF > /kaniko/.docker/config.json
+          #{
+          #  "auths": {
+          #    "https://reg.1u1.it:443/": {
+          #      "auth": "$(echo -n "${{ secrets.HARBOR_USERNAME }}:${{ secrets.HARBOR_PASSWORD }}" | base64)"
+          #    }
+          #  }
+          #}
+          #EOF'
+          #echo "listing contents"
+          #sudo ls -l /kaniko/.docker/
           #mkdir -p /kaniko/.docker 
           #echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > /tmp/kaniko/.docker/config.json
-          echo "checking contents"
-          sudo cat /kaniko/.docker/config.json
+          #echo "checking contents"
+          #sudo cat /kaniko/.docker/config.json
+
+      - name: Environment Credentials
+        env:
+          #REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+          USERNAME: ${{ secrets.HARBOR_USERNAME }}
+          PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
           
       - name: Build and Push Docker Image with Kaniko
         uses: docker://gcr.io/kaniko-project/executor:v1.20.0
