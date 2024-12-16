@@ -36,7 +36,13 @@ jobs:
       #  uses: actions/upload-artifact@v4
       #  with:
       #    name: nc-server-package
-      #    path: /tmp/nc-server.tar.gz   
+      #    path: /tmp/nc-server.tar.gz  
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        id: install
+        with:
+          version: 'latest'  
 
       - name: Create and Apply Kaniko Job
         run: |
