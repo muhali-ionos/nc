@@ -38,25 +38,19 @@ jobs:
       #    name: nc-server-package
       #    path: /tmp/nc-server.tar.gz   
 
-      - name: Set up Docker credentials
+      - name: Create and Apply Kaniko Job
         run: |
+          # Delete existing job if exists
+          #kubectl delete job kaniko-nc-build-push --namespace=arc-runners --ignore-not-found
           pwd
-          #ls -la
-          echo $HOME
-          mkdir -p $HOME/.docker 
-          ls -l $HOME/.docker
-          echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > $HOME/.docker/config.json
-          echo "checking contents"
-          cat $HOME/.docker/config.json
-          
-      - name: Build and Push Docker Image with Kaniko
-        uses: docker://gcr.io/kaniko-project/executor:latest
-        with:
-          args: >
-            --dockerfile=./.devcontainer/Dockerfile 
-            --context=.
-            --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
-            --skip-tls-verify
+          ls -l
+          kubectl apply -f minikube-kaniko.yaml         
+
+      - name: Monitor Job Status
+        run: |
+          echo "Monitoring Nextcloud build job."
+          kubectl wait --for=condition=complete job/Create Minikube Environment with Kaniko --timeout=1200s
+          echo "Nextcloud Image is pushed to the Harbor Registry."
   
         
             
