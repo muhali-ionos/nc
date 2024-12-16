@@ -75,8 +75,7 @@ jobs:
 
       - name: Create and Apply Kaniko Job
         run: |
-          kubectl delete job kaniko-nc-build-push --namespace=arc-runners --ignore-not-found
-          kubectl create -f - <<EOF
+          echo "
           apiVersion: batch/v1
           kind: Job
           metadata:
@@ -107,7 +106,7 @@ jobs:
                   secret:
                     secretName: docker-sec-config
               backoffLimit: 1
-          EOF
+          " | kubectl apply -f -
           
       - name: Monitor Job Status
         run: |
