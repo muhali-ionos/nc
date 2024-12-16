@@ -43,6 +43,9 @@ jobs:
         env:
           USERNAME: ${{ secrets.HARBOR_USERNAME }}
           PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+        run: |
+          pwd
+          ls -la
           
       - name: Build and Push Docker Image with Kaniko
         uses: docker://gcr.io/kaniko-project/executor:v1.20.0
