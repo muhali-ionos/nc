@@ -49,8 +49,6 @@ jobs:
 
       - name: Create and Apply Kaniko Job
         run: |
-          # Delete existing job if exists
-          #kubectl delete job kaniko-nc-build-push --namespace=arc-runners --ignore-not-found
           pwd
           ls -l
           kubectl apply -f minikube-kaniko.yaml   
@@ -64,7 +62,7 @@ jobs:
       - name: Monitor Job Status
         run: |
           echo "Monitoring Nextcloud build job."
-          kubectl wait --for=condition=complete job/Create Minikube Environment with Kaniko --timeout=1200s
+          kubectl wait --for=condition=complete job/create-minikube-with-kaniko --timeout=1200s
           echo "Nextcloud Image is pushed to the Harbor Registry."
   
         
