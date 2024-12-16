@@ -42,9 +42,9 @@ jobs:
         run: |
           #pwd
           #ls -la
-          sudo mkdir -p /tmp/kaniko/.docker 
-          sudo ls -l /tmp/kaniko/.docker
-          sudo bash -c 'cat <<EOF > /tmp/kaniko/.docker/config.json
+          sudo mkdir -p /kaniko/.docker 
+          sudo ls -l /kaniko/.docker
+          sudo bash -c 'cat <<EOF > /kaniko/.docker/config.json
           {
             "auths": {
               "https://reg.1u1.it:443/v2/": {
@@ -54,20 +54,18 @@ jobs:
           }
           EOF'
           echo "listing contents"
-          sudo ls -l /tmp/kaniko/.docker/
-          #mkdir -p /tmp/kaniko/.docker 
+          sudo ls -l /kaniko/.docker/
+          #mkdir -p /kaniko/.docker 
           #echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > /tmp/kaniko/.docker/config.json
           echo "checking contents"
-          sudo cat /tmp/kaniko/.docker/config.json
+          sudo cat /kaniko/.docker/config.json
           
       - name: Build and Push Docker Image with Kaniko
         uses: docker://gcr.io/kaniko-project/executor:v0.6.0
         with:
           args: >
-            --kaniko-dir=/tmp/kaniko
             --dockerfile=./.devcontainer/Dockerfile 
             --context=.
-            --single-snapshot      
             --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
             --skip-tls-verify
   
