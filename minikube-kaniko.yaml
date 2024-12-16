@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: Create Minikube Environment with Kaniko
+  name: create-minikube-with-kaniko
   namespace: arc-runners
 spec:
   template:
