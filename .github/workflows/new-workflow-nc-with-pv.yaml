@@ -44,13 +44,22 @@ jobs:
         with:
           version: 'latest'  
 
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Create and Apply Kaniko Job
         run: |
           # Delete existing job if exists
           #kubectl delete job kaniko-nc-build-push --namespace=arc-runners --ignore-not-found
           pwd
           ls -l
-          kubectl apply -f minikube-kaniko.yaml         
+          kubectl apply -f minikube-kaniko.yaml   
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          repository: IONOS-Productivity/nc-server
+          ref: master
 
       - name: Monitor Job Status
         run: |
