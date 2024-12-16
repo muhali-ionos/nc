@@ -61,7 +61,7 @@ jobs:
           sudo cat /kaniko/.docker/config.json
           
       - name: Build and Push Docker Image with Kaniko
-        uses: docker://gcr.io/kaniko-project/executor:v0.6.0
+        uses: docker://gcr.io/kaniko-project/executor:latest
         with:
           args: >
             --dockerfile=./.devcontainer/Dockerfile 
