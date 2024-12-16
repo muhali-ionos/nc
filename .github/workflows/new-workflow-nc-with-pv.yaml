@@ -22,21 +22,18 @@ jobs:
           repository: IONOS-Productivity/nc-server
           ref: master
 
-      #- name: Package Code
-      #  run: |
-      #    pwd
-      #    ls -la
-      #    #mkdir -p /tmp/nc-server
-      #    #cp -r . /tmp/nc-server
-      #    #cd /tmp/nc-server
-      #    tar -czf /tmp/nc-server.tar.gz ../nc/
-      #    ls -lh /tmp/nc-server.tar.gz
+      - name: Package Code
+        run: |
+          pwd
+          ls -la
+          tar -czf /tmp/nc-server.tar.gz ../nc/
+          ls -lh /tmp/nc-server.tar.gz
 
-      #- name: Upload Artifact
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #    name: nc-server-package
-      #    path: /tmp/nc-server.tar.gz  
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nc-server-package
+          path: /tmp/nc-server.tar.gz  
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v4
@@ -44,26 +41,77 @@ jobs:
         with:
           version: 'latest'  
 
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Setup KUBECONFIG
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_AISLAB }}" > $HOME/.kube/config
+          cat $HOME/.kube/config
+          export KUBECONFIG=$HOME/.kube/config
+
+      - name: Create Docker Secret Config for Kaniko
+        run: |
+          mkdir -p $HOME/.docker
+          echo "{\"auths\":{\"reg.1u1.it:443\":{\"username\":\"${{ secrets.HARBOR_USERNAME }}\",\"password\":\"${{ secrets.HARBOR_PASSWORD }}\"}}}" > $HOME/.docker/config.json
+          set +e
+          kubectl get secret docker-sec-config
+          if [ $? -ne 0 ]; then
+            kubectl create secret generic docker-sec-config --from-file=config.json=$HOME/.docker/config.json --namespace=arc-runners
+          else
+            echo "Secret docker-sec-config already exists, skipping creation."
+          fi
+          set -e
+        
+      #- name: Create Dockerfile Config for Kaniko
+      #  run: |
+      #    # cd /tmp/nc-server/.devcontainer
+      #    set +e
+      #    kubectl get cm dockerfile-config
+      #    if [ $? -ne 0 ]; then
+      #      kubectl create configmap dockerfile-config --from-file=Dockerfile=/tmp/nc-server/.devcontainer/Dockerfile --namespace=arc-runners            
+      #    else
+      #      echo "Configmap dockerfile-config already exists, skipping creation."
+      #    fi
+      #    set -e 
 
       - name: Create and Apply Kaniko Job
         run: |
-          pwd
-          ls -l
-          kubectl apply -f minikube-kaniko.yaml   
-
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          repository: IONOS-Productivity/nc-server
-          ref: master
-
+          kubectl delete job kaniko-nc-build-push --namespace=arc-runners --ignore-not-found
+          kubectl create -f - <<EOF
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            name: kaniko-nc-build-push
+            namespace: arc-runners
+          spec:
+            template:
+              spec:
+                containers:
+                - name: kaniko
+                  image: gcr.io/kaniko-project/executor:latest
+                  args:
+                  - --dockerfile=./.devcontainer/Dockerfile 
+                  - --context=.
+                  - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
+                  - --skip-tls-verify
+                  volumeMounts:
+                  #- name: dockerfile-config
+                  #  mountPath: /workspace
+                  - name: docker-sec-config
+                    mountPath: /kaniko/.docker
+                restartPolicy: Never
+                volumes:
+                #- name: dockerfile-config
+                #  configMap:
+                #    name: dockerfile-config
+                - name: docker-sec-config
+                  secret:
+                    secretName: docker-sec-config
+              backoffLimit: 1
+          EOF
+          
       - name: Monitor Job Status
         run: |
           echo "Monitoring Nextcloud build job."
-          kubectl wait --for=condition=complete job/create-minikube-with-kaniko --timeout=1200s
-          echo "Nextcloud Image is pushed to the Harbor Registry."
-  
-        
+          kubectl wait --for=condition=complete job/kaniko-nc-build-push --timeout=1200s
+          echo "Nextcloud Image is pushed to the Harbor Registry."   
             
