@@ -13,8 +13,8 @@ jobs:
       #  run: |
       #    pwd
       #    ls -la
-          #sudo apt-get update && sudo apt-get install -y make
-          #make --version  
+      #    sudo apt-get update && sudo apt-get install -y make
+      #    make --version  
 
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -26,8 +26,8 @@ jobs:
       #  run: |
       #    pwd
       #    ls -la
-          #tar -czf /tmp/nc-server.tar.gz ../nc/
-          #ls -lh /tmp/nc-server.tar.gz
+      #    tar -czf /tmp/nc-server.tar.gz ../nc/
+      #    ls -lh /tmp/nc-server.tar.gz
 
       #- name: Upload Artifact
       #  uses: actions/upload-artifact@v4
@@ -76,6 +76,15 @@ jobs:
 
       - name: Create and Apply Kaniko Job
         run: |
+          set +e
+          # Check if the job exists
+          kubectl get job kaniko-nc-build-push -n arc-runners
+          if [ $? -eq 0 ]; then
+            echo "Job kaniko-nc-build-push exists, deleting it..."
+            kubectl delete job kaniko-nc-build-push -n arc-runners
+          fi
+      
+          # Create a new job
           echo "
           apiVersion: batch/v1
           kind: Job
@@ -89,7 +98,7 @@ jobs:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:latest
                   args:
-                  - --dockerfile=/workspace/Dockerfile 
+                  - --dockerfile=/workspace/Dockerfile
                   - --context=dir:///workspace
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
@@ -108,8 +117,8 @@ jobs:
                     secretName: docker-sec-config
             backoffLimit: 1
           " | kubectl apply -f -
-
-          
+          set -e
+    
       - name: Monitor Job Status
         run: |
           echo "Monitoring Nextcloud build job."
