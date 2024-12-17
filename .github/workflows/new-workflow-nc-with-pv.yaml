@@ -68,7 +68,7 @@ jobs:
           set +e
           kubectl get cm dockerfile-config
           if [ $? -ne 0 ]; then
-            kubectl create configmap dockerfile-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners            
+            kubectl create configmap docker-file-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners            
           else
             echo "Configmap dockerfile-config already exists, skipping creation."
           fi
