@@ -42,12 +42,13 @@ jobs:
           version: 'latest'  
 
       - name: Setup KUBECONFIG
-        run: |
-          kubectl config current-context
+        run: |          
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG_PUKI }}" > $HOME/.kube/config
           #cat $HOME/.kube/config
           export KUBECONFIG=$HOME/.kube/config
+          k config get-contexts
+          kubectl config current-context
           kubectl config use-context cluster-admin-puki-cluster@puki-cluster
           
       - name: Create Docker Secret Config for Kaniko
