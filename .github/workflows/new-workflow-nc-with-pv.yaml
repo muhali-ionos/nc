@@ -43,6 +43,7 @@ jobs:
 
       - name: Setup KUBECONFIG
         run: |
+          kubectl config current-context
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG_PUKI }}" > $HOME/.kube/config
           #cat $HOME/.kube/config
