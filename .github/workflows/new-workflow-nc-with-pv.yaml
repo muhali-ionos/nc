@@ -62,17 +62,17 @@ jobs:
           fi
           set -e
         
-      #- name: Create Dockerfile Config for Kaniko
-      #  run: |
-      #    # cd /tmp/nc-server/.devcontainer
-      #    set +e
-      #    kubectl get cm dockerfile-config
-      #    if [ $? -ne 0 ]; then
-      #      kubectl create configmap dockerfile-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners            
-      #    else
-      #      echo "Configmap dockerfile-config already exists, skipping creation."
-      #    fi
-      #    set -e 
+      - name: Create Dockerfile Config for Kaniko
+        run: |
+          # cd /tmp/nc-server/.devcontainer
+          set +e
+          kubectl get cm dockerfile-config
+          if [ $? -ne 0 ]; then
+            kubectl create configmap dockerfile-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners            
+          else
+            echo "Configmap dockerfile-config already exists, skipping creation."
+          fi
+          set -e 
 
       - name: Create and Apply Kaniko Job
         run: |
@@ -94,20 +94,22 @@ jobs:
                   - |
                     echo "Listing contents of /workspace:"
                     ls -l /workspace
+                    cat /workplace/Dockerfile
                   args:
-                  - --dockerfile=/workspace/.devcontainer/Dockerfile 
+                  - --dockerfile=/workspace/Dockerfile 
                   - --context=dir:///workspace
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
                   volumeMounts:
-                  - name: workspace
+                  - name: docker-file-config
                     mountPath: /workspace
                   - name: docker-sec-config
                     mountPath: /kaniko/.docker
                 restartPolicy: Never
                 volumes:
-                - name: workspace
-                  emptyDir: {}
+                - name: docker-file-config
+                  configMap:
+                    name: docker-file-config
                 - name: docker-sec-config
                   secret:
                     secretName: docker-sec-config
