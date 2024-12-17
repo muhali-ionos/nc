@@ -87,7 +87,13 @@ jobs:
               spec:
                 containers:
                 - name: kaniko
-                  image: gcr.io/kaniko-project/executor:latest
+                  image: gcr.io/kaniko-project/executor:debug
+                  command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    echo "Listing contents of /workspace:"
+                    ls -l /workspace
                   args:
                   - --dockerfile=/workspace/.devcontainer/Dockerfile 
                   - --context=dir:///workspace
