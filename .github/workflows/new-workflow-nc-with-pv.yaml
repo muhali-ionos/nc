@@ -47,7 +47,7 @@ jobs:
           echo "${{ secrets.KUBECONFIG_PUKI }}" > $HOME/.kube/config
           #cat $HOME/.kube/config
           export KUBECONFIG=$HOME/.kube/config
-          k config get-contexts
+          kubectl config get-contexts
           kubectl config current-context
           kubectl config use-context cluster-admin-puki-cluster@puki-cluster
           
