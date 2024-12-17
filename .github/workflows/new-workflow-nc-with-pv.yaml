@@ -89,8 +89,8 @@ jobs:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:latest
                   args:
-                  - --dockerfile=/workplace/.devcontainer/Dockerfile 
-                  - --context=dir:///workplace
+                  - --dockerfile=/workspace/.devcontainer/Dockerfile 
+                  - --context=dir:///workspace
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
                   volumeMounts:
