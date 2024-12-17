@@ -9,10 +9,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Print contents
-        run: |
-          pwd
-          ls -la
+      #- name: Print contents
+      #  run: |
+      #    pwd
+      #    ls -la
           #sudo apt-get update && sudo apt-get install -y make
           #make --version  
 
@@ -22,10 +22,10 @@ jobs:
           repository: IONOS-Productivity/nc-server
           ref: master
 
-      - name: Package Code
-        run: |
-          pwd
-          ls -la
+      #- name: Package Code
+      #  run: |
+      #    pwd
+      #    ls -la
           #tar -czf /tmp/nc-server.tar.gz ../nc/
           #ls -lh /tmp/nc-server.tar.gz
 
@@ -66,11 +66,11 @@ jobs:
         run: |
           # cd /tmp/nc-server/.devcontainer
           set +e
-          kubectl get cm dockerfile-config
+          kubectl get cm docker-file-config
           if [ $? -ne 0 ]; then
             kubectl create configmap docker-file-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners            
           else
-            echo "Configmap dockerfile-config already exists, skipping creation."
+            echo "Configmap docker-file-config already exists, skipping creation."
           fi
           set -e 
 
@@ -87,14 +87,7 @@ jobs:
               spec:
                 containers:
                 - name: kaniko
-                  image: gcr.io/kaniko-project/executor:debug
-                  command:
-                  - /bin/sh
-                  - -c
-                  - |
-                    echo "Listing contents of /workspace:"
-                    ls -l /workspace
-                    cat /workplace/Dockerfile
+                  image: gcr.io/kaniko-project/executor:latest
                   args:
                   - --dockerfile=/workspace/Dockerfile 
                   - --context=dir:///workspace
@@ -123,3 +116,9 @@ jobs:
           kubectl wait --for=condition=complete job/kaniko-nc-build-push --timeout=300s
           echo "Nextcloud Image is pushed to the Harbor Registry."   
             
+      - name: Delete Kaniko Job
+        run: |
+          kubectl delete job kaniko-nc-build-push --namespace=arc-runners --ignore-not-found
+          kubectl delete secret -n arc-runners docker-sec-config
+          kubectl delete cm -n arc-runners docker-file-config
+          echo "All tasks completed gracefully."
