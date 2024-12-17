@@ -102,8 +102,6 @@ jobs:
                 volumes:
                 - name: workspace
                   emptyDir: {}
-                  configMap:
-                    name: dockerfile-config
                 - name: docker-sec-config
                   secret:
                     secretName: docker-sec-config
