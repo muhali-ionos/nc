@@ -45,9 +45,10 @@ jobs:
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG_PUKI }}" > $HOME/.kube/config
-          cat $HOME/.kube/config
+          #cat $HOME/.kube/config
           export KUBECONFIG=$HOME/.kube/config
-
+          kubectl config use-context cluster-admin-puki-cluster@puki-cluster
+          
       - name: Create Docker Secret Config for Kaniko
         run: |
           mkdir -p $HOME/.docker
@@ -64,7 +65,6 @@ jobs:
         
       - name: Create Dockerfile Config for Kaniko
         run: |
-          # cd /tmp/nc-server/.devcontainer
           set +e
           kubectl get cm docker-file-config
           if [ $? -ne 0 ]; then
