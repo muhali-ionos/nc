@@ -108,6 +108,7 @@ jobs:
                   volumeMounts:
                   - name: docker-file-config
                     mountPath: /workspace/Dockerfile
+                    subPath: Dockerfile
                   - name: docker-sec-config
                     mountPath: /kaniko/.docker
                 restartPolicy: Never
