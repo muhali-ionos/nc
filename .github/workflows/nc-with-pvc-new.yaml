@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
 
-name: New-Modified-Hi-Drive-Build-NC
+name: PVC-Modified-Hi-Drive
 jobs:
   build-and-push:
     runs-on: self-hosted-nc
