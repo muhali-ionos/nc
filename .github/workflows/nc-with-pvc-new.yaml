@@ -105,7 +105,8 @@ jobs:
                   - --skip-tls-verify
                   volumeMounts:
                   - name: build-context
-                    mountPath: /workspace                
+                    mountPath: /workspace   
+                    readOnly: true
                   - name: docker-sec-config
                     mountPath: /kaniko/.docker
                 restartPolicy: Never
