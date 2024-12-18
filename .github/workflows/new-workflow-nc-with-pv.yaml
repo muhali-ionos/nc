@@ -106,14 +106,14 @@ jobs:
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
                   volumeMounts:
-                  - name: docker-file-config
-                    mountPath: /workspace/Dockerfile
-                    subPath: Dockerfile
+                  - name: build-context
+                    mountPath: /workspace
+                    #subPath: Dockerfile
                   - name: docker-sec-config
                     mountPath: /kaniko/.docker
                 restartPolicy: Never
                 volumes:
-                - name: docker-file-config
+                - name: build-context
                   secret:
                     secretName: docker-file-config
                 - name: docker-sec-config
