@@ -41,15 +41,15 @@ jobs:
         with:
           version: 'latest'  
 
-      - name: Setup KUBECONFIG
-        run: |          
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG_PUKI }}" > $HOME/.kube/config
-          #cat $HOME/.kube/config
-          export KUBECONFIG=$HOME/.kube/config
-          #kubectl config get-contexts
-          #kubectl config current-context
-          kubectl config use-context cluster-admin-puki-cluster@puki-cluster
+      #- name: Setup KUBECONFIG
+      #  run: |          
+      #    mkdir -p $HOME/.kube
+      #    echo "${{ secrets.KUBECONFIG_PUKI }}" > $HOME/.kube/config
+      #    #cat $HOME/.kube/config
+      #    export KUBECONFIG=$HOME/.kube/config
+      #    #kubectl config get-contexts
+      #    #kubectl config current-context
+      #    kubectl config use-context cluster-admin-puki-cluster@puki-cluster
           
       - name: Create Docker Secret Config for Kaniko
         run: |
