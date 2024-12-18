@@ -67,12 +67,14 @@ jobs:
       #    fi
       #    set -e 
 
-      - name: Fetch Runner PVC Name
-        id: fetch-pvc
+      - name: Fetch Runner Pod and PVC Name
+        id: fetch-pod
         run: |
-          PVC_NAME=$(kubectl get pvc -n arc-runners -l app.kubernetes.io/instance=self-hosted-nc -o jsonpath='{.items[0].metadata.name}')
+          POD_NAME=$(kubectl get pods -n arc-runners -l app.kubernetes.io/instance=self-hosted-nc -o jsonpath='{.items[0].metadata.name}')
+          echo "POD_NAME=$POD_NAME" >> $GITHUB_ENV
+          PVC_NAME="${POD_NAME}-work"
           echo "PVC_NAME=$PVC_NAME" >> $GITHUB_ENV
-      
+
       - name: Create and Apply Kaniko Job
         run: |
           set +e
