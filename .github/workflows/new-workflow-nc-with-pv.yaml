@@ -61,18 +61,19 @@ jobs:
           if [ $? -ne 0 ]; then
             kubectl create secret generic docker-sec-config --from-file=config.json=$HOME/.docker/config.json --namespace=arc-runners
           else
-            echo "Secret docker-sec-config already exists, skipping creation."
+            echo "docker-sec-config already exists, skipping creation."
           fi
           set -e
         
-      - name: Create Dockerfile Config for Kaniko
+      - name: Create Dockerfile for Kaniko
         run: |
           set +e
-          kubectl get cm docker-file-config
+          kubectl get secret docker-file-config
           if [ $? -ne 0 ]; then
-            kubectl create configmap docker-file-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners            
+            #kubectl create configmap docker-file-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners  
+            kubectl create secret generic docker-file-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners
           else
-            echo "Configmap docker-file-config already exists, skipping creation."
+            echo "docker-file-config already exists, skipping creation."
           fi
           set -e 
 
@@ -112,8 +113,8 @@ jobs:
                 restartPolicy: Never
                 volumes:
                 - name: docker-file-config
-                  configMap:
-                    name: docker-file-config
+                  secret:
+                    secretname: docker-file-config
                 - name: docker-sec-config
                   secret:
                     secretName: docker-sec-config
@@ -131,5 +132,5 @@ jobs:
         run: |
           kubectl delete job kaniko-nc-build-push --namespace=arc-runners --ignore-not-found
           kubectl delete secret -n arc-runners docker-sec-config
-          kubectl delete cm -n arc-runners docker-file-config
+          kubectl delete secret -n arc-runners docker-file-config
           echo "All tasks completed gracefully."
