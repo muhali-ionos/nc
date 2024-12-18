@@ -114,7 +114,7 @@ jobs:
                 volumes:
                 - name: docker-file-config
                   secret:
-                    secretname: docker-file-config
+                    secretName: docker-file-config
                 - name: docker-sec-config
                   secret:
                     secretName: docker-sec-config
