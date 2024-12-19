@@ -121,7 +121,7 @@ jobs:
               - name: docker-sec-config
                 secret:
                   secretName: docker-sec-config
-          backoffLimit: 1
+           backoffLimit: 1
           " | kubectl apply -f -
           set -e
     
