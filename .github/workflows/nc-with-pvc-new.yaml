@@ -84,7 +84,7 @@ jobs:
             echo "Job kaniko-nc-build-push exists, deleting it..."
             kubectl delete job kaniko-nc-build-push -n arc-runners
           fi
-      
+          
           # Create a new job
           echo "
           apiVersion: batch/v1
@@ -98,7 +98,7 @@ jobs:
                 nodeSelector:
                   kubernetes.io/os: linux
                   node-restriction.kubernetes.io/reserved-for: cert-manager
-                  cert-manager: "true"
+                  cert-manager: 'true'
                 containers:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:debug
@@ -109,19 +109,19 @@ jobs:
                   - --skip-tls-verify
                   volumeMounts:
                   - name: build-context
-                    mountPath: /workspace   
+                    mountPath: /workspace
                     readOnly: true
                   - name: docker-sec-config
                     mountPath: /kaniko/.docker
                 restartPolicy: Never
-                volumes:
-                - name: build-context
-                  persistentVolumeClaim:
-                    claimName: ${PVC_NAME}
-                - name: docker-sec-config
-                  secret:
-                    secretName: docker-sec-config
-            backoffLimit: 1
+              volumes:
+              - name: build-context
+                persistentVolumeClaim:
+                  claimName: ${PVC_NAME}
+              - name: docker-sec-config
+                secret:
+                  secretName: docker-sec-config
+          backoffLimit: 1
           " | kubectl apply -f -
           set -e
     
