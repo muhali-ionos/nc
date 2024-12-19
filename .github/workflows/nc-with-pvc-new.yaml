@@ -98,7 +98,7 @@ jobs:
                   node-restriction.kubernetes.io/reserved-for: cert-manager                
                 containers:
                 - name: kaniko
-                  image: gcr.io/kaniko-project/executor:latest
+                  image: gcr.io/kaniko-project/executor:debug
                   args:
                   - --dockerfile=/workspace/.devcontainer/Dockerfile
                   - --context=dir:///workspace
