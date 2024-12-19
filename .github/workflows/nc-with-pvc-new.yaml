@@ -76,7 +76,6 @@ jobs:
           echo "PVC_NAME=$PVC_NAME" >> $GITHUB_ENV
 
       - name: Create and Apply Kaniko Job
-      - name: Create and Apply Kaniko Job
         run: |
           set +e
           kubectl get job kaniko-nc-build-push -n arc-runners
