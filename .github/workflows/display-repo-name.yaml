@@ -1,0 +1,29 @@
+on:
+  workflow_dispatch:
+
+name: Display Repo
+jobs:
+  build-and-push:
+    runs-on: self-hosted-nc
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Print contents
+        run: |
+          pwd
+          ls -la
+          echo: "The Repo is $GITHUB_REPOSITORY"
+          
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          repository: IONOS-Productivity/nc-server
+          ref: master
+
+      - name: New Repo Details
+        run: |
+          pwd
+          ls -la
+          echo: "The Repo is $GITHUB_REPOSITORY"
