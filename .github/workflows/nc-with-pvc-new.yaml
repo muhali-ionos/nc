@@ -95,6 +95,10 @@ jobs:
           spec:
             template:
               spec:
+               nodeSelector:
+                  kubernetes.io/os: linux
+                  node-restriction.kubernetes.io/reserved-for: cert-manager
+                  cert-manager: "true"
                 containers:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:debug
