@@ -40,16 +40,6 @@ jobs:
         id: install
         with:
           version: 'latest'  
-
-      #- name: Setup KUBECONFIG
-      #  run: |          
-      #    mkdir -p $HOME/.kube
-      #    echo "${{ secrets.KUBECONFIG_PUKI }}" > $HOME/.kube/config
-      #    #cat $HOME/.kube/config
-      #    export KUBECONFIG=$HOME/.kube/config
-      #    #kubectl config get-contexts
-      #    #kubectl config current-context
-      #    kubectl config use-context cluster-admin-puki-cluster@puki-cluster
           
       - name: Create Docker Secret Config for Kaniko
         run: |
@@ -96,7 +86,10 @@ jobs:
             namespace: arc-runners
           spec:
             template:
-              spec:
+              spec:                
+                nodeSelector:
+                  kubernetes.io/os: linux
+                  node-restriction.kubernetes.io/reserved-for: cert-manager  
                 containers:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:latest
@@ -107,8 +100,7 @@ jobs:
                   - --skip-tls-verify
                   volumeMounts:
                   - name: build-context
-                    mountPath: /workspace
-                    #subPath: Dockerfile
+                    mountPath: /workspace                    
                   - name: docker-sec-config
                     mountPath: /kaniko/.docker
                 restartPolicy: Never
