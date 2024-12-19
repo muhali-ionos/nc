@@ -95,8 +95,7 @@ jobs:
               spec:
                 nodeSelector:
                   kubernetes.io/os: linux
-                  node-restriction.kubernetes.io/reserved-for: cert-manager
-                  cert-manager: "true"
+                  node-restriction.kubernetes.io/reserved-for: cert-manager                
                 containers:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:latest
