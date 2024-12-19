@@ -95,7 +95,7 @@ jobs:
           spec:
             template:
               spec:
-               nodeSelector:
+                nodeSelector:
                   kubernetes.io/os: linux
                   node-restriction.kubernetes.io/reserved-for: cert-manager
                   cert-manager: "true"
