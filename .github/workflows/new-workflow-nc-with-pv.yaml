@@ -116,7 +116,7 @@ jobs:
                 volumes:
                 - name: build-context
                   hostPath:
-                    path: ./nc/nc
+                    path: /nc/nc
                 #  secret:
                 #    secretName: docker-file-config
                 - name: docker-sec-config
