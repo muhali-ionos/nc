@@ -93,6 +93,14 @@ jobs:
                 containers:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:debug
+                  command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    echo "Listing /workspace contents:"; 
+                    ls -la /workspace;
+                    echo "Sleeping for debug...";
+                    sleep 3600
                   args:
                   - --dockerfile=./Dockerfile
                   - --context=git://github.com/muhali-ionos/nc.git
