@@ -9,18 +9,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      #- name: Print contents
-      #  run: |
-      #    pwd
-      #    ls -la
+      - name: Print contents
+        run: |
+          pwd
+          ls -la
       #    sudo apt-get update && sudo apt-get install -y make
       #    make --version  
 
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          repository: IONOS-Productivity/nc-server
-          ref: master
+      #- name: Checkout Repository
+      #  uses: actions/checkout@v4
+      #  with:
+      #    repository: IONOS-Productivity/nc-server
+      #    ref: master
 
       #- name: Package Code
       #  run: |
@@ -94,8 +94,8 @@ jobs:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:debug
                   args:
-                  - --dockerfile=./.devcontainer/Dockerfile
-                  - --context=git://github.com/IONOS-Productivity/nc-server.git
+                  - --dockerfile=./Dockerfile
+                  - --context=git://github.com/muhali-ionos/nc.git
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
                   volumeMounts:
