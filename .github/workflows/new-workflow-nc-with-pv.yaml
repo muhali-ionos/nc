@@ -55,17 +55,17 @@ jobs:
           fi
           set -e
         
-      - name: Create Dockerfile for Kaniko
-        run: |
-          set +e
-          kubectl get secret docker-file-config
-          if [ $? -ne 0 ]; then
-            #kubectl create configmap docker-file-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners  
-            kubectl create secret generic docker-file-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners
-          else
-            echo "docker-file-config already exists, skipping creation."
-          fi
-          set -e 
+      #- name: Create Dockerfile for Kaniko
+      #  run: |
+      #    set +e
+      #    kubectl get secret docker-file-config
+      #    if [ $? -ne 0 ]; then
+      #      #kubectl create configmap docker-file-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners  
+      #      kubectl create secret generic docker-file-config --from-file=Dockerfile=./.devcontainer/Dockerfile --namespace=arc-runners
+      #    else
+      #      echo "docker-file-config already exists, skipping creation."
+      #    fi
+      #    set -e 
 
       - name: Create and Apply Kaniko Job
         run: |
@@ -92,22 +92,22 @@ jobs:
                   node-restriction.kubernetes.io/reserved-for: cert-manager  
                 containers:
                 - name: kaniko
-                  image: gcr.io/kaniko-project/executor:latest
+                  image: gcr.io/kaniko-project/executor:debug
                   args:
-                  - --dockerfile=/workspace/Dockerfile
-                  - --context=dir:///workspace
+                  - --dockerfile=./.devcontainer/Dockerfile
+                  - --context=git://github.com/IONOS-Productivity/nc-server.git
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
                   volumeMounts:
-                  - name: build-context
-                    mountPath: /workspace                    
+                  #- name: build-context
+                  #  mountPath: /workspace                    
                   - name: docker-sec-config
                     mountPath: /kaniko/.docker
                 restartPolicy: Never
                 volumes:
-                - name: build-context
-                  secret:
-                    secretName: docker-file-config
+                #- name: build-context
+                #  secret:
+                #    secretName: docker-file-config
                 - name: docker-sec-config
                   secret:
                     secretName: docker-sec-config
@@ -124,6 +124,6 @@ jobs:
       - name: Delete Kaniko Job
         run: |
           kubectl delete job kaniko-nc-build-push --namespace=arc-runners --ignore-not-found
-          kubectl delete secret -n arc-runners docker-sec-config
-          kubectl delete secret -n arc-runners docker-file-config
+          kubectl delete secret -n arc-runners docker-sec-config --ignore-not-found
+          #kubectl delete secret -n arc-runners docker-file-config --ignore-not-found
           echo "All tasks completed gracefully."
