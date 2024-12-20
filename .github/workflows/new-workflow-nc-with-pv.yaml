@@ -99,8 +99,8 @@ jobs:
                   - |
                     echo "Listing /workspace contents:"; 
                     ls -la /workspace;
-                    echo "Sleeping for debug...";
-                    sleep 3600
+                    #echo "Sleeping for debug...";
+                    #sleep 3600
                   args:
                   - --dockerfile=/workspace/Dockerfile
                   - --context=dir:///workspace
