@@ -92,15 +92,7 @@ jobs:
                   node-restriction.kubernetes.io/reserved-for: cert-manager  
                 containers:
                 - name: kaniko
-                  image: gcr.io/kaniko-project/executor:latest 
-                  command:
-                  - /bin/sh
-                  - -c
-                  - |
-                    echo "Listing /workspace contents:"; 
-                    ls -la /workspace;
-                    echo "Sleeping for debug...";
-                    sleep 3600
+                  image: gcr.io/kaniko-project/executor:latest                 
                   args:
                   - --dockerfile=/workspace/Dockerfile
                   - --context=dir:///workspace
