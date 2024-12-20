@@ -92,28 +92,23 @@ jobs:
                   node-restriction.kubernetes.io/reserved-for: cert-manager  
                 containers:
                 - name: kaniko
-                  image: gcr.io/kaniko-project/executor:debug
-                  command:
-                  - /bin/sh
-                  - -c
-                  - |
-                    echo "Listing /workspace contents:"; 
-                    ls -la /workspace;
-                    echo "Sleeping for debug...";
-                    sleep 3600
+                  image: gcr.io/kaniko-project/executor:debug            
                   args:
-                  - --dockerfile=./Dockerfile
-                  - --context=git://github.com/muhali-ionos/nc.git
+                  - --dockerfile=/workspace/Dockerfile
+                  - --context=dir:///workspace
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
                   volumeMounts:
-                  #- name: build-context
-                  #  mountPath: /workspace                    
+                  - name: build-context
+                    mountPath: /workspace   
+                    readOnly: true
                   - name: docker-sec-config
                     mountPath: /kaniko/.docker
                 restartPolicy: Never
                 volumes:
-                #- name: build-context
+                - name: build-context
+                  hostPath:
+                    path: /home/runner/_work/nc/nc
                 #  secret:
                 #    secretName: docker-file-config
                 - name: docker-sec-config
