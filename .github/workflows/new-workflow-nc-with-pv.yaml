@@ -120,15 +120,16 @@ jobs:
                     mountPath: /workspace
                 containers:
                 - name: kaniko
-                  image: gcr.io/kaniko-project/executor:debug
+                  image: gcr.io/kaniko-project/executor:latest
+                  #image: gcr.io/kaniko-project/executor:debug
                   command:
-                  - /bin/sh
-                  - -c
-                  - |
-                    echo "Listing /workspace contents:"; 
-                    ls -la /workspace;
-                    echo "Sleeping for debug...";
-                    sleep 3600
+                  #- /bin/sh
+                  #- -c
+                  #- |
+                  #  echo "Listing /workspace contents:"; 
+                  #  ls -la /workspace;
+                  #  echo "Sleeping for debug...";
+                  #  sleep 3600
                   args:
                   - --dockerfile=/workspace/.devcontainer/Dockerfile
                   - --context=dir:///workspace
