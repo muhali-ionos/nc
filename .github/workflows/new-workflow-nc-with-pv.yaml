@@ -16,16 +16,16 @@ jobs:
       #    sudo apt-get update && sudo apt-get install -y make
       #    make --version  
 
-      #- name: Checkout Repository
-      #  uses: actions/checkout@v4
-      #  with:
-      #    repository: IONOS-Productivity/nc-server
-      #    ref: master
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          repository: IONOS-Productivity/nc-server
+          ref: master
 
-      #- name: Package Code
-      #  run: |
-      #    pwd
-      #    ls -la
+      - name: Package Code
+        run: |
+          pwd
+          ls -la
       #    tar -czf /tmp/nc-server.tar.gz ../nc/
       #    ls -lh /tmp/nc-server.tar.gz
 
@@ -67,6 +67,14 @@ jobs:
       #    fi
       #    set -e 
 
+      - name: Identify Runner Pod and Node
+        id: identify-resources
+        run: |
+          POD_NAME=$(kubectl get pods -n arc-runners -l app.kubernetes.io/instance=self-hosted-nc -o jsonpath='{.items[0].metadata.name}')
+          NODE_NAME=$(kubectl get pod ${POD_NAME} -n arc-runners -o jsonpath='{.spec.nodeName}')
+          echo "POD_NAME=${POD_NAME}" >> $GITHUB_ENV
+          echo "NODE_NAME=${NODE_NAME}" >> $GITHUB_ENV
+            
       - name: Create and Apply Kaniko Job
         run: |
           set +e
@@ -90,25 +98,34 @@ jobs:
                 nodeSelector:
                   kubernetes.io/os: linux
                   node-restriction.kubernetes.io/reserved-for: cert-manager  
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: kubernetes.io/hostname
+                          operator: In
+                          values:
+                          - ${NODE_NAME}
                 containers:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:latest                 
                   args:
-                  - --dockerfile=/workspace/Dockerfile
+                  - --dockerfile=/workspace/.devcontainer/Dockerfile
                   - --context=dir:///workspace
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
                   volumeMounts:
                   - name: build-context
                     mountPath: /workspace   
-                    readOnly: true
+                    readOnly: false
                   - name: docker-sec-config
                     mountPath: /kaniko/.docker
                 restartPolicy: Never
                 volumes:
                 - name: build-context
-                  hostPath:
-                    path: /nc/nc
+                  emptyDir: {}
+              
                 #  secret:
                 #    secretName: docker-file-config
                 - name: docker-sec-config
