@@ -16,16 +16,16 @@ jobs:
       #    sudo apt-get update && sudo apt-get install -y make
       #    make --version  
 
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          repository: IONOS-Productivity/nc-server
-          ref: master
+      #- name: Checkout Repository
+      #  uses: actions/checkout@v4
+      #  with:
+      #    repository: IONOS-Productivity/nc-server
+      #    ref: master
 
-      - name: Package Code
-        run: |
-          pwd
-          ls -la
+      #- name: Package Code
+      #  run: |
+      #    pwd
+      #    ls -la
       #    tar -czf /tmp/nc-server.tar.gz ../nc/
       #    ls -lh /tmp/nc-server.tar.gz
 
@@ -113,7 +113,7 @@ jobs:
                   args: 
                   - clone
                   - --depth=1
-                  - 'https://github.com/IONOS-Productivity/nc-server.git'
+                  - 'https://github.com/muhali-ionos/nc.git'
                   - /workspace
                   volumeMounts:
                   - name: build-context
@@ -131,7 +131,7 @@ jobs:
                   #  echo "Sleeping for debug...";
                   #  sleep 3600
                   args:
-                  - --dockerfile=/workspace/.devcontainer/Dockerfile
+                  - --dockerfile=/workspace/Dockerfile
                   - --context=dir:///workspace
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
