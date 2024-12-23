@@ -107,33 +107,42 @@ jobs:
                           operator: In
                           values:
                           - ${NODE_NAME}
+                initContainers:
+                - name: git-clone
+                  image: alpine/git
+                  args: 
+                  - clone
+                  - --depth=1
+                  - 'https://github.com/IONOS-Productivity/nc-server.git'
+                  - /workspace
+                  volumeMounts:
+                  - name: build-context
+                    mountPath: /workspace
                 containers:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:debug
-                  #command:
-                  #- /bin/sh
-                  #- -c
-                  #- |
-                  #  echo "Listing /workspace contents:"; 
-                  #  ls -la /workspace;
-                  #  echo "Sleeping for debug...";
-                  #  sleep 3600
+                  command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    echo "Listing /workspace contents:"; 
+                    ls -la /workspace;
+                    echo "Sleeping for debug...";
+                    sleep 3600
                   args:
                   - --dockerfile=/workspace/.devcontainer/Dockerfile
-                  - --context=git://github.com/IONOS-Productivity/nc-server.git
+                  - --context=dir:///workspace
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
                   volumeMounts:
                   - name: build-context
-                    mountPath: /workspace   
-                    readOnly: false
+                    mountPath: /workspace                     
                   - name: docker-sec-config
                     mountPath: /kaniko/.docker
                 restartPolicy: Never
                 volumes:
                 - name: build-context
-                  emptyDir: {}
-              
+                  emptyDir: {}              
                 #  secret:
                 #    secretName: docker-file-config
                 - name: docker-sec-config
