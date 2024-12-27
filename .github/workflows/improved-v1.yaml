@@ -102,7 +102,7 @@ jobs:
                   - --compressed-caching=false
                   resources:
                     limits:
-                      memory: 4Gi
+                      memory: 2Gi
                       cpu: 2
                   volumeMounts:                  
                   - name: docker-sec-config
