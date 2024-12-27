@@ -93,11 +93,17 @@ jobs:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:latest
                   args:
+                  - --verbosity=debug
                   - --dockerfile=./.devcontainer/Dockerfile
-                  - --context=git://$TOKEN@github.com/IONOS-Productivity/nc-server.git
+                  - --context=git://oauth2:$TOKEN@github.com/IONOS-Productivity/nc-server.git
                   - --git=branch=master
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
-                  - --skip-tls-verify              
+                  - --skip-tls-verify
+                  - --compressed-caching=false
+                  resources:
+                    limits:
+                      memory: 4Gi
+                      cpu: 2
                   volumeMounts:                  
                   - name: docker-sec-config
                     mountPath: /kaniko/.docker
