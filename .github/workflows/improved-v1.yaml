@@ -8,21 +8,21 @@ jobs:
     runs-on: self-hosted-nc
         
     steps:
-      #- name: Install Make
-      #  run: sudo apt-get update && sudo apt-get install -y make
+      - name: Install Make
+        run: sudo apt-get update && sudo apt-get install -y make
 
-      #- name: Checkout Repository
-      #  uses: actions/checkout@v4
-      #  with:
-      #    repository: IONOS-Productivity/nc-server
-      #    ref: master
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          repository: IONOS-Productivity/nc-server
+          ref: master
 
-      #- name: Package Code
-      #  run: |
-      #    pwd
-      #    ls -la
-      #    tar -czf /tmp/nc-server.tar.gz ../internal-sh-runner-nc/
-      #    ls -lh /tmp/nc-server.tar.gz
+      - name: Package Code
+        run: |
+          pwd
+          ls -la
+          tar -czf /tmp/nc-server.tar.gz ../internal-sh-runner-nc/
+          ls -lh /tmp/nc-server.tar.gz
 
       #- name: Upload Artifact
       #  uses: actions/upload-artifact@v4
@@ -94,7 +94,7 @@ jobs:
                   image: gcr.io/kaniko-project/executor:latest
                   args:
                   - --dockerfile=./Dockerfile
-                  - --context=git://oauth2:$TOKEN@github.com/IONOS-Productivity/nc-server.git
+                  - --context=git://$TOKEN@github.com/IONOS-Productivity/nc-server.git
                   - --git=branch=master
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify                  
