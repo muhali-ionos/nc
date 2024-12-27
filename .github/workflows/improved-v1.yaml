@@ -21,7 +21,7 @@ jobs:
         run: |
           pwd
           ls -la
-          tar -czf /tmp/nc-server.tar.gz ../internal-sh-runner-nc/
+          tar -czf /tmp/nc-server.tar.gz ../nc/
           ls -lh /tmp/nc-server.tar.gz
 
       #- name: Upload Artifact
