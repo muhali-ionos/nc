@@ -95,7 +95,7 @@ jobs:
                   args:
                   - --verbosity=debug
                   - --dockerfile=./Dockerfile
-                  - --context=git://oauth2:$TOKEN@github.com/muhai-ionos/nc.git
+                  - --context=git://oauth2:$TOKEN@github.com/muhali-ionos/nc.git
                   - --git=branch=main
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
