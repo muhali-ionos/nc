@@ -94,8 +94,8 @@ jobs:
                   image: gcr.io/kaniko-project/executor:latest
                   args:
                   - --dockerfile=./Dockerfile
-                  - --context=git://oauth2:$TOKEN@github.com/IONOS-Productivity/ionos-gpt-session-mgmt.git
-                  - --git=branch=main
+                  - --context=git://oauth2:$TOKEN@github.com/IONOS-Productivity/nc-server.git#master
+                
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify                  
                   #resources:
