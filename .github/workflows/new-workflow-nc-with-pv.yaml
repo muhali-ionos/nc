@@ -131,7 +131,7 @@ jobs:
                   #  echo "Sleeping for debug...";
                   #  sleep 3600
                   args:
-                  - --dockerfile=/workspace/Dockerfile
+                  - --dockerfile=/workspace/.devcontainer/Dockerfile
                   - --context=dir:///workspace
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify
