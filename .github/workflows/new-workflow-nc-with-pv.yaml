@@ -16,11 +16,11 @@ jobs:
       #    sudo apt-get update && sudo apt-get install -y make
       #    make --version  
 
-      #- name: Checkout Repository
-      #  uses: actions/checkout@v4
-      #  with:
-      #    repository: IONOS-Productivity/nc-server
-      #    ref: master
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          repository: IONOS-Productivity/nc-server
+          ref: master
 
       #- name: Package Code
       #  run: |
@@ -113,7 +113,7 @@ jobs:
                   args: 
                   - clone
                   - --depth=1
-                  - 'https://github.com/muhali-ionos/nc.git'
+                  - 'https://github.com/IONOS-Productivity/nc-server'
                   - /workspace
                   volumeMounts:
                   - name: build-context
