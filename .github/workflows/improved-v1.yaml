@@ -80,15 +80,15 @@ jobs:
           spec:
             template:
               spec: 
-                affinity:
-                  nodeAffinity:
-                    requiredDuringSchedulingIgnoredDuringExecution:
-                      nodeSelectorTerms:
-                      - matchExpressions:
-                        - key: kubernetes.io/hostname
-                          operator: In
-                          values:
-                          - ${NODE_NAME}
+                #affinity:
+                #  nodeAffinity:
+                #    requiredDuringSchedulingIgnoredDuringExecution:
+                #      nodeSelectorTerms:
+                #      - matchExpressions:
+                #        - key: kubernetes.io/hostname
+                #          operator: In
+                #          values:
+                #          - ${NODE_NAME}
                 containers:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:latest
