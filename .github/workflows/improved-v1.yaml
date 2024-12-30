@@ -11,18 +11,18 @@ jobs:
       - name: Install Make
         run: sudo apt-get update && sudo apt-get install -y make
 
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          repository: IONOS-Productivity/nc-server
-          ref: master
+      #- name: Checkout Repository
+      #  uses: actions/checkout@v4
+      #  with:
+      #    repository: IONOS-Productivity/nc-server
+      #    ref: master
 
-      - name: Package Code
-        run: |
-          pwd
-          ls -la
-          tar -czf /tmp/nc-server.tar.gz ../nc/
-          ls -lh /tmp/nc-server.tar.gz
+      #- name: Package Code
+      #  run: |
+      #    pwd
+      #    ls -la
+      #    tar -czf /tmp/nc-server.tar.gz ../nc/
+      #    ls -lh /tmp/nc-server.tar.gz
 
       #- name: Upload Artifact
       #  uses: actions/upload-artifact@v4
@@ -80,15 +80,15 @@ jobs:
           spec:
             template:
               spec: 
-                #affinity:
-                #  nodeAffinity:
-                #    requiredDuringSchedulingIgnoredDuringExecution:
-                #      nodeSelectorTerms:
-                #      - matchExpressions:
-                #        - key: kubernetes.io/hostname
-                #          operator: In
-                #          values:
-                #          - ${NODE_NAME}
+                affinity:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: kubernetes.io/hostname
+                          operator: In
+                          values:
+                          - ${NODE_NAME}
                 containers:
                 - name: kaniko
                   image: gcr.io/kaniko-project/executor:latest
