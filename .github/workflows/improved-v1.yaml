@@ -5,7 +5,8 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: self-hosted-nc
+    #runs-on: self-hosted-nc
+    runs-on: lb03050
         
     steps:
       - name: Install Make
