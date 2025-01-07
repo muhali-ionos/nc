@@ -68,7 +68,7 @@ jobs:
             kubectl delete job kaniko-build-push-nc-image -n arc-runners
           fi
           
-          export TOKEN="${{ secrets.GH_PAT }}"
+          #export TOKEN="${{ secrets.GH_PAT }}"
           
           # Create a new job
           echo "
@@ -94,7 +94,7 @@ jobs:
                   image: gcr.io/kaniko-project/executor:latest
                   args:
                   - --dockerfile=./.devcontainer/Dockerfile
-                  - --context=git://$TOKEN@github.com/IONOS-Productivity/nc-server.git
+                  - --context=git://github.com/IONOS-Productivity/nc-server.git
                   - --git=branch=master
                   - --destination=reg.1u1.it:443/itoah/hidrive-nc-test:latest
                   - --skip-tls-verify                  
